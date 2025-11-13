@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PhysioCore — Bilimsel Kas Gelişimi</title>
+
+  <!-- Tailwind CDN (hızlı prototip için) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Hafif ek stil ve basit animasyonlar */
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#0b1220 0%, #07070b 100%); }
+    .glow { text-shadow: 0 2px 12px rgba(250,204,21,0.12); }
+    .card-fade { transform-origin: center; transition: all .35s ease; }
+    .card-fade:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+    /* Küçük spinner */
+    .spinner { border:3px solid rgba(255,255,255,0.15); border-top:3px solid rgba(255,255,255,0.85); border-radius:50%; width:18px; height:18px; animation:spin .9s linear infinite;}
+    @keyframes spin{ to{ transform:rotate(360deg) } }
+    /* Küçük responsive düzeltmeler */
+    @media (min-width: 1024px){ .max-w-screen-sm { max-width: 860px; } }
+  </style>
+</head>
+<body class="text-white min-h-screen">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-30 bg-gray-900/90 backdrop-blur-sm border-b border-yellow-800/40">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+      <div class="text-2xl font-extrabold text-yellow-400 glow">PhysioCore</div>
+      <nav class="flex gap-2 items-center">
+        <button data-target="makale" class="nav-btn px-3 py-2 rounded-full text-xs sm:text-sm font-medium">Makaleler</button>
+        <button data-target="program" class="nav-btn px-3 py-2 rounded-full text-xs sm:text-sm font-medium bg-yellow-600 text-black">Programlar</button>
+        <button data-target="iletisim" class="nav-btn px-3 py-2 rounded-full text-xs sm:text-sm font-medium">İletişim</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-screen-sm mx-auto p-6 space-y-12">
+
+    <!-- Hero -->
+    <section class="text-center pt-8">
+      <h1 class="text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500">
+        PhysioCore — Bilimsel Kas Gelişiminin Merkezi
+      </h1>
+      <p class="text-gray-300 mt-3">Kas gelişimi ve performans artışı için bilimsel, pratik ve uygulanabilir rehberler.</p>
+    </section>
+
+    <!-- VKE Hesaplayıcı + AI Danışman -->
+    <section id="vke" class="bg-gray-800/80 p-6 rounded-2xl border border-gray-700 space-y-4">
+      <h2 class="text-2xl font-bold text-yellow-400 text-center">Vücut Kitle Endeksi (VKE) Hesaplayıcı</h2>
+      <p class="text-gray-400 text-sm text-center">Kilonuzu (kg) ve boyunuzu (cm) girin.</p>
+
+      <div class="space-y-3">
+        <div>
+          <label class="text-sm text-gray-300 block mb-1">Ağırlık (kg)</label>
+          <input id="weight" type="number" placeholder="Örn: 75" class="w-full p-3 rounded-lg bg-gray-900 border border-gray-700"/>
+        </div>
+        <div>
+          <label class="text-sm text-gray-300 block mb-1">Boy (cm)</label>
+          <input id="height" type="number" placeholder="Örn: 178" class="w-full p-3 rounded-lg bg-gray-900 border border-gray-700"/>
+        </div>
+        <button id="calcBtn" class="w-full py-3 bg-yellow-500 text-black font-bold rounded-lg">VKE'yi Hesapla</button>
+
+        <div id="bmiResult" class="hidden bg-gray-900 p-4 rounded-lg border-l-4 border-yellow-500 text-center">
+          <p class="text-sm text-gray-400">Sonucunuz:</p>
+          <p class="text-3xl mt-1">VKE: <span id="bmiValue" class="text-green-400 font-bold">--</span></p>
+          <p id="bmiStatus" class="text-lg mt-1 text-green-400 font-bold">--</p>
+          <p id="bmiNote" class="text-xs text-gray-500 mt-2 hidden">*VKE, kas kütlesi yüksek sporcularda yanıltıcı olabilir.</p>
+        </div>
+      </div>
+
+      <!-- AI Danışman -->
+      <div class="pt-6 border-t border-gray-700/50 space-y-3">
+        <h3 class="text-xl font-bold text-gray-100 text-center">✨ AI Fitness Danışmanı</h3>
+        <p class="text-gray-400 text-sm text-center">VKE'nize göre kısa tavsiye oluşturun (opsiyonel — API anahtarı gerektirir).</p>
+
+        <div>
+          <label class="text-sm text-gray-300 block mb-1">Hedefiniz (örn: "Yağ yakıp kas kazanmak")</label>
+          <input id="userGoal" type="text" placeholder="Hedefinizi girin" class="w-full p-3 rounded-lg bg-gray-900 border border-gray-700"/>
+        </div>
+
+        <div class="grid grid-cols-1 gap-2">
+          <button id="aiBtn" class="w-full py-3 bg-yellow-700 text-white font-extrabold rounded-lg disabled:opacity-40">Tavsiye Oluştur ✨</button>
+          <small class="text-xs text-gray-500">Not: Otomatik Gemini çağrısı için `apiKey` değişkenine anahtar girilmeli. Aksi halde yerel örnek mesaj gösterilir.</small>
+        </div>
+
+        <div id="aiBox" class="hidden bg-gray-900 p-4 rounded-lg border-l-4 border-yellow-700">
+          <p class="text-sm font-semibold text-yellow-500 mb-2">Kişiselleştirilmiş Tavsiye:</p>
+          <pre id="aiAdvice" class="whitespace-pre-wrap text-gray-300"></pre>
+
+          <div id="aiSources" class="mt-3 pt-2 border-t border-gray-800 hidden">
+            <p class="text-xs font-semibold text-gray-500 mb-1">Kaynaklar:</p>
+            <ul id="sourcesList" class="list-disc list-inside text-xs text-gray-400"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Makaleler -->
+    <section id="makale" class="text-center space-y-6">
+      <h2 class="text-3xl font-bold text-yellow-400">Temel Bilimsel Alanlar</h2>
+      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+        <article class="bg-gray-800/70 p-5 rounded-xl card-fade">
+          <div class="text-3xl mb-3">🧬</div>
+          <h3 class="text-xl font-semibold text-yellow-400">Protein Dengesi ve Kas Büyümesi</h3>
+          <p class="text-gray-300 text-sm mt-2">Kas dokusu, yeterli amino asit dengesiyle maksimum büyüme potansiyeline ulaşır.</p>
+          <button class="mt-3 text-sm text-yellow-500">Makalenin Tamamını Oku →</button>
+        </article>
+
+        <article class="bg-gray-800/70 p-5 rounded-xl card-fade">
+          <div class="text-3xl mb-3">💤</div>
+          <h3 class="text-xl font-semibold text-yellow-400">Uyku ve Hormon Aktivasyonu</h3>
+          <p class="text-gray-300 text-sm mt-2">Kaliteli uyku, büyüme hormonu salınımını ve kas onarımını destekler.</p>
+          <button class="mt-3 text-sm text-yellow-500">Makalenin Tamamını Oku →</button>
+        </article>
+
+        <article class="bg-gray-800/70 p-5 rounded-xl card-fade">
+          <div class="text-3xl mb-3">🏋️</div>
+          <h3 class="text-xl font-semibold text-yellow-400">Antrenman-Dinlenme Döngüsü</h3>
+          <p class="text-gray-300 text-sm mt-2">Her kas, antrenmanda değil dinlenmede büyür — doğru yüklenme denge ister.</p>
+          <button class="mt-3 text-sm text-yellow-500">Makalenin Tamamını Oku →</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- Programlar -->
+    <section id="program" class="text-center space-y-6">
+      <h2 class="text-3xl font-bold text-yellow-400">Profesyonel Kas Gelişimi Programlarımız</h2>
+      <p class="text-gray-400 max-w-2xl mx-auto">Kişiye özel planlar; bilim ve performans prensipleriyle hazırlanmıştır.</p>
+
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-xl ring-4 ring-yellow-500/40 card-fade">
+          <h4 class="text-2xl font-extrabold text-yellow-300">Demo</h4>
+          <p class="text-4xl font-bold text-yellow-400 my-2">Ücretsiz</p>
+          <p class="text-gray-400 text-sm">Tanıtım amaçlı kısa süreli program</p>
+          <button onclick="openWhatsApp()" class="mt-4 w-full py-2 rounded-lg bg-yellow-500 text-black font-semibold">WhatsApp ile İletişime Geç</button>
+          <p class="text-xs text-gray-500 italic mt-2">⚡ Ücretsiz dene, farkı gör.</p>
+        </div>
+
+        <div class="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-xl ring-1 ring-gray-700 card-fade">
+          <h4 class="text-2xl font-extrabold text-gray-200">Lite</h4>
+          <p class="text-3xl font-bold text-yellow-400 my-2">349 TL</p>
+          <p class="text-gray-400 text-sm">Yeni başlayanlar için temel plan</p>
+          <button onclick="openWhatsApp()" class="mt-4 w-full py-2 rounded-lg bg-yellow-500 text-black font-semibold">WhatsApp ile İletişime Geç</button>
+        </div>
+
+        <div class="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-xl ring-1 ring-gray-700 card-fade">
+          <h4 class="text-2xl font-extrabold text-gray-200">Middle</h4>
+          <p class="text-3xl font-bold text-yellow-400 my-2">749 TL</p>
+          <p class="text-gray-400 text-sm">Kas hacmini artırmak isteyenler için denge planı</p>
+          <button onclick="openWhatsApp()" class="mt-4 w-full py-2 rounded-lg bg-yellow-500 text-black font-semibold">WhatsApp ile İletişime Geç</button>
+        </div>
+
+        <div class="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-xl ring-1 ring-gray-700 card-fade">
+          <h4 class="text-2xl font-extrabold text-gray-200">Elite</h4>
+          <p class="text-3xl font-bold text-yellow-400 my-2">1.249 TL</p>
+          <p class="text-gray-400 text-sm">Kişiye özel mentorluk ve profesyonel plan</p>
+          <button onclick="openWhatsApp()" class="mt-4 w-full py-2 rounded-lg bg-yellow-500 text-black font-semibold">WhatsApp ile İletişime Geç</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- İletişim -->
+    <section id="iletisim" class="text-center space-y-4">
+      <h3 class="text-2xl font-bold text-yellow-400">Hemen Şimdi Başlayın</h3>
+      <p class="text-gray-400">Profesyonel danışmanlık almak için WhatsApp üzerinden iletişime geçin.</p>
+      <button onclick="openWhatsApp()" class="py-3 px-6 bg-yellow-500 text-black font-extrabold rounded-full">Ücretsiz Danışmanlık Alın (WhatsApp)</button>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center text-gray-400 mt-12 pb-8">
+    <p>© 2025 PhysioCore | Bilimsel Kas Gelişimi Platformu</p>
+    <p class="mt-1 text-sm">Profesyonellik. Güven. Disiplin.</p>
+  </footer>
+
+  <!-- JS (işlevsellik) -->
+  <script>
+    // --- Nav scroll ---
+    document.querySelectorAll('.nav-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=> {
+        const id = btn.getAttribute('data-target');
+        const el = document.getElementById(id) || document.querySelector('[id="'+id+'"]');
+        if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+        document.querySelectorAll('.nav-btn').forEach(n=>n.classList.remove('bg-yellow-600','text-black'));
+        btn.classList.add('bg-yellow-600','text-black');
+      });
+    });
+
+    // --- WhatsApp shortcut ---
+    function openWhatsApp() {
+      window.open('https://wa.me/905459475808', '_blank');
+    }
+
+    // --- VKE hesaplama ---
+    const weightInput = document.getElementById('weight');
+    const heightInput = document.getElementById('height');
+    const calcBtn = document.getElementById('calcBtn');
+    const bmiResultBox = document.getElementById('bmiResult');
+    const bmiValueEl = document.getElementById('bmiValue');
+    const bmiStatusEl = document.getElementById('bmiStatus');
+    const bmiNote = document.getElementById('bmiNote');
+
+    let latestBmi = null;
+    calcBtn.addEventListener('click', () => {
+      const w = parseFloat(weightInput.value);
+      const h = parseFloat(heightInput.value);
+
+      if (!w || !h || w <= 0 || h <= 0) {
+        showBmi(null, 'Lütfen geçerli değerler girin.', true);
+        return;
+      }
+      const hM = h / 100;
+      const bmi = w / (hM*hM);
+      const rounded = parseFloat(bmi.toFixed(2));
+      let status = '';
+      if (bmi < 18.5) status = 'Zayıf (Riskli)';
+      else if (bmi >= 18.5 && bmi < 25) status = 'Normal (Sağlıklı)';
+      else if (bmi >= 25 && bmi < 30) status = 'Fazla Kilolu';
+      else status = 'Obez';
+
+      latestBmi = { value: rounded, status };
+      showBmi(rounded, status, false);
+      // Clear previous AI result
+      hideAiResult();
+    });
+
+    function showBmi(value, status, isError){
+      bmiResultBox.classList.remove('hidden');
+      bmiValueEl.textContent = value ? value : 'Hata';
+      bmiStatusEl.textContent = status;
+      bmiValueEl.className = isError ? 'text-red-500 font-bold' : getBmiClass(value);
+      bmiStatusEl.className = isError ? 'text-red-500 font-bold' : getBmiClass(value);
+      bmiNote.classList.toggle('hidden', !value);
+      // Scroll to result
+      bmiResultBox.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+
+    function getBmiClass(val){
+      if (!val) return 'text-gray-400';
+      if (val < 18.5 || val >= 30) return 'text-red-500 font-bold';
+      if (val >= 25) return 'text-orange-400 font-bold';
+      return 'text-green-400 font-bold';
+    }
+
+    // --- AI Tavsiye (Gemini placeholder) ---
+    const aiBtn = document.getElementById('aiBtn');
+    const aiBox = document.getElementById('aiBox');
+    const aiAdviceEl = document.getElementById('aiAdvice');
+    const aiSourcesEl = document.getElementById('aiSources');
+    const sourcesList = document.getElementById('sourcesList');
+    const userGoalInput = document.getElementById('userGoal');
+
+    // === IMPORTANT ===
+    // Eğer gerçekten Gemini (veya başka) bir generative API kullanacaksanız,
+    // aşağıdaki `apiKey` değişkenine anahtarınızı koyun ve apiUrl'ı sağlayıcınıza göre güncelleyin.
+    // Bu örnekte anahtar boş bırakıldı; bu yüzden örnek öneri metni dönecektir.
+    const apiKey = ""; // <-- Buraya API anahtarınızı koyun (güvenli ortamda saklayın!)
+    const apiUrl = ""; // <-- Eğer doğrudan bir endpointiniz varsa buraya girin.
+
+    aiBtn.addEventListener('click', async () => {
+      // Ön koşullar
+      if (!latestBmi || !latestBmi.value) {
+        showBmi(null, 'Lütfen önce VKE hesaplaması yapın.', true);
+        return;
+      }
+      const goal = userGoalInput.value.trim();
+      if (!goal) {
+        showBmi(latestBmi.value, 'Lütfen hedefinizi (örn: "kas kazanmak") girin.', true);
+        return;
+      }
+
+      // UI: loading
+      aiBtn.disabled = true;
+      const oldText = aiBtn.innerHTML;
+      aiBtn.innerHTML = '<span class="spinner inline-block mr-2"></span> Tavsiye Oluşturuluyor...';
+
+      try {
+        let adviceText = '';
+        let sources = [];
+
+        if (apiKey && apiUrl) {
+          // Eğer gerçek API varsa, burada fetch ile çağrı yapılır.
+          // Örnek iskelet (kullanıcı endpoint'ine göre değiştirin):
+          const payload = {
+            // örnek payload; gerçek API gereksinimine göre güncelleyin
+            prompt: `VKE: ${latestBmi.status}. Hedef: ${goal}. Kısa, bilimsel tavsiye (Türkçe, max 150 kelime).`
+          };
+          const res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type':'application/json', 'Authorization': 'Bearer ' + apiKey },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error('API hatası: ' + res.status);
+          const json = await res.json();
+          // Burada dönüş formatına göre text ve kaynakları çıkarın:
+          adviceText = json?.answer || JSON.stringify(json);
+          // sources = json?.sources || [];
+        } else {
+          // Yerel örnek tavsiye (API yoksa gösterilecek)
+          adviceText = [
+            `Hedef: ${goal}`,
+            ``,
+            `1) Antrenman: Haftada 3-5 gün, ağırlık antrenmanında çok eklemli hareketlere (squat, deadlift, bench press, row) ağırlık verin. Set aralıkları 3-5 set x 6-12 tekrar aralığında olmalı.`,
+            `2) Beslenme: Günlük protein alımınızı vücut ağırlığı başına ~1.6-2.2 g/kg aralığına çıkarın; enerji açığı/ fazlası hedefe göre ayarlayın.`,
+            `3) Dinlenme: Haftada en az 7-8 saat kaliteli uyku, her kas grubuna 48 saat toparlanma süresi sağlayın.`,
+            ``,
+            `Not: Bu kısa tavsiye genel niteliklidir; özel durumlar (yaralanma, ilaç, hastalık) için profesyonel değerlendirme alın.`
+          ].join("\\n");
+          sources = [
+            { title: 'Genel Spor Bilimi Prensipleri', uri: 'https://example.com/spor-bilimi' },
+            { title: 'Protein ve Kas Büyümesi', uri: 'https://example.com/protein-kas' }
+          ];
+        }
+
+        // Göster
+        aiBox.classList.remove('hidden');
+        aiAdviceEl.textContent = adviceText;
+        if (sources && sources.length > 0) {
+          aiSourcesEl.classList.remove('hidden');
+          sourcesList.innerHTML = '';
+          sources.slice(0,3).forEach(s=>{
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = s.uri || '#';
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.textContent = s.title || s.uri || 'Kaynak';
+            a.className = 'underline hover:no-underline';
+            li.appendChild(a);
+            sourcesList.appendChild(li);
+          })
+        } else {
+          aiSourcesEl.classList.add('hidden');
+        }
+
+      } catch (err) {
+        aiBox.classList.remove('hidden');
+        aiAdviceEl.textContent = 'API çağrısı sırasında bir hata oluştu veya geçerli bir API anahtarı yok. Hata: ' + (err.message || err);
+        aiSourcesEl.classList.add('hidden');
+      } finally {
+        aiBtn.disabled = false;
+        aiBtn.innerHTML = oldText;
+      }
+    });
+
+    function hideAiResult(){
+      aiBox.classList.add('hidden');
+      aiAdviceEl.textContent = '';
+      aiSourcesEl.classList.add('hidden');
+      sourcesList.innerHTML = '';
+    }
+
+  </script>
+</body>
+</html>
