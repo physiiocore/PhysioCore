@@ -302,37 +302,22 @@
         </section>
         
         <section id="iletisim" class="w-full text-center space-y-4 max-w-4xl pt-10 mx-auto">
-            <h3 class="text-3xl font-bold text-yellow-400">Hemen Şimdi İletişime Geçin</h3>
+            <h3 class="text-3xl font-bold text-yellow-400">Hemen Şimdi Başlayın</h3>
             <p class="text-gray-400 text-base mb-8">
-                Hayatınızı bilimle değiştirin. Profesyonel spor danışmanlarımızla iletişime geçmek için aşağıdaki formu veya WhatsApp'ı kullanın.
+                Hayatınızı bilimle değiştirin. Profesyonel spor danışmanlarımızla iletişime geçmek için aşağıdaki butonları kullanın.
             </p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                <div class="bg-gray-800/80 p-6 rounded-xl border border-gray-700 shadow-xl">
-                    <h4 class="text-xl font-semibold text-yellow-400 mb-4">Bilgi Talep Formu</h4>
+                <div class="bg-gray-800/80 p-6 rounded-xl border border-gray-700 shadow-xl flex flex-col justify-center items-center space-y-4">
+                    <h4 class="text-xl font-semibold text-yellow-400">Bilgi Talep Edin</h4>
+                    <p class="text-gray-400 text-center text-sm">Hedeflerinizi ve sorularınızı bize mail atın, size özel dönüş yapalım.</p>
                     
-                    <form 
-                        id="contact-form" 
-                        class="space-y-4" 
-                        action="https://formspree.io/f/FORM_ID_BURAYA_GELMELI" 
-                        method="POST"
+                    <a 
+                        href="mailto:physiiocore@gmail.com?subject=PhysioCore%20Program%20Hakkında%20Bilgi%20Talebi&body=Merhaba%2C%20programlarınız%20hakkında%20daha%20detaylı%20bilgi%20almak%20istiyorum.%0A%0AAdım%3A%0AHedefim%3A"
+                        class="w-full text-center py-3 px-8 bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold rounded-lg shadow-md transition-all transform hover:scale-[1.01]"
                     >
-                        
-                        <input type="hidden" name="_next" value="#iletisim" />
-
-                        <div>
-                            <input type="text" name="Ad_Soyad" placeholder="Adınız Soyadınız" required class="calc-input">
-                        </div>
-                        <div>
-                            <input type="email" name="Eposta" placeholder="E-posta Adresiniz" required class="calc-input">
-                        </div>
-                        <div>
-                            <textarea name="Mesaj" placeholder="Hedefleriniz veya Sorularınız (Size özel program için detay verin)" rows="4" required class="calc-input resize-none"></textarea>
-                        </div>
-                        <button type="submit" class="w-full py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.01]">
-                            Mesaj Gönder
-                        </button>
-                    </form>
+                        E-posta Gönder
+                    </a>
                 </div>
                 
                 <div class="bg-gray-800/80 p-6 rounded-xl border border-gray-700 shadow-xl flex flex-col justify-center items-center space-y-4">
