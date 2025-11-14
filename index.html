@@ -8,16 +8,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
     <style>
-        /* Ana yazı tipi */
+        /* Ana yazı tipi ve kaydırma davranışı */
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
         }
-        /* Basit bir CSS geçişi (React'teki motion yerine) */
+        /* Basit bir CSS geçişi */
         .transition-transform {
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
-        /* Hamburger menü animasyonu */
+        /* Mobil menü animasyonu */
         .menu-hidden {
             max-height: 0;
             opacity: 0;
@@ -25,8 +25,35 @@
             overflow: hidden;
         }
         .menu-open {
-            max-height: 500px; /* Yeterince büyük bir değer */
+            max-height: 500px; 
             opacity: 1;
+        }
+        /* Hesaplayıcı inputları için ortak stil */
+        .calc-input {
+            width: 100%; 
+            padding: 0.75rem; 
+            border-radius: 0.5rem; 
+            background-color: rgb(17 24 39); /* gray-900 */ 
+            border: 1px solid rgb(55 65 81); /* gray-700 */ 
+            color: white; 
+            transition: all 0.3s;
+            appearance: none; /* Select okunu düzenlemek için */
+        }
+        .calc-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgb(245 158 11); /* ring-yellow-500 */
+            border-color: rgb(245 158 11); /* border-yellow-500 */
+        }
+        
+        /* Sayaç Animasyonları için görünürlük sınıfı */
+        .metric-card-initial {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .metric-card-visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -72,78 +99,103 @@
             </h1>
             <p class="text-gray-300 text-base sm:text-lg leading-relaxed">
                 <strong>PhysioCore</strong>, kas gelişimi ve performans artırımı alanında bilimsel verilerle desteklenmiş, profesyonel düzeyde hazırlanan makaleler sunar.
-                Bilim, strateji ve disiplin birleştiğinde sonuç kaçınılmazdır.
+                Her bilgi, antrenörler ve spor fizyologları tarafından analiz edilmiştir. Bilim, strateji ve disiplin birleştiğinde sonuç kaçılmazdır.
             </p>
         </section>
 
-        <section class="w-full" id="vke">
-            <div class="bg-gray-800/80 p-8 sm:p-10 rounded-2xl border border-gray-700 shadow-2xl shadow-yellow-900/40 max-w-xl mx-auto space-y-6">
-                <h2 class="text-3xl font-bold text-yellow-400 text-center">
-                    Vücut Kitle Endeksi (VKE) Hesaplayıcı
-                </h2>
+        <section class="w-full pt-0">
+             <h2 class="text-4xl font-bold text-gray-100 text-center mb-10">
+                Kanıtlanmış Başarı. Bilimsel Metot.
+            </h2>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label for="age" class="block text-sm font-medium text-gray-300 mb-2">Yaşınız</label>
-                        <input id="age" type="number" placeholder="Örn: 28" class="vke-input" value="28">
-                    </div>
-                    <div>
-                        <label for="gender" class="block text-sm font-medium text-gray-300 mb-2">Cinsiyetiniz</label>
-                        <select id="gender" class="vke-input appearance-none">
-                            <option value="male">Erkek</option>
-                            <option value="female">Kadın</option>
-                        </select>
-                    </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto text-center">
+                <div id="metric-card-1" class="metric-card-initial p-6 bg-gray-800/80 rounded-xl border border-yellow-700 shadow-xl shadow-yellow-900/30">
+                    <span id="metric-1" class="text-3xl sm:text-4xl font-extrabold text-yellow-400">0%</span>
+                    <p class="text-sm text-gray-400 mt-2 font-medium">Müşteri Memnuniyeti</p>
                 </div>
 
-                <div class="space-y-4">
-                    <div>
-                        <label for="weight" class="block text-sm font-medium text-gray-300 mb-2">Ağırlık (kg)</label>
-                        <input id="weight" type="number" placeholder="Örn: 75" class="vke-input">
-                    </div>
-                    <div>
-                        <label for="height" class="block text-sm font-medium text-gray-300 mb-2">Boy (cm)</label>
-                        <input id="height" type="number" placeholder="Örn: 178" class="vke-input">
-                    </div>
+                <div id="metric-card-2" class="metric-card-initial p-6 bg-gray-800/80 rounded-xl border border-yellow-700 shadow-xl shadow-yellow-900/30">
+                    <span id="metric-2" class="text-3xl sm:text-4xl font-extrabold text-yellow-400">0kg</span>
+                    <p class="text-sm text-gray-400 mt-2 font-medium">Ortalama Net Kas Kazanımı (3 Ay)</p>
                 </div>
 
-                <button id="calculate-bmi" onclick="calculateBMI()" class="w-full py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.01] hover:brightness-110">
-                    VKE'yi Hesapla
-                </button>
-
-                <div id="bmi-result-card" class="hidden bg-gray-900 p-4 rounded-lg border-l-4 mt-4 text-center">
-                    <p class="text-sm text-gray-400">Sonucunuz:</p>
-                    <p class="text-3xl mt-1">
-                        VKE: <span id="bmi-value" class="text-gray-400"></span>
-                    </p>
-                    <p id="bmi-status" class="text-lg mt-1 text-gray-400">
-                        Durum:
-                    </p>
-                </div>
-           
-                <div class="pt-8 space-y-4 border-t border-gray-700/50">
-                    <h3 class="text-2xl font-bold text-gray-100 text-center">✨ AI Fitness Danışmanı</h3>
-                    <p class="text-gray-400 text-center text-sm">Mevcut VKE'nize ve hedefinize özel, anında bilimsel tavsiye alın.</p>
-
-                    <div>
-                      <label for="goal" class="block text-sm font-medium text-gray-300 mb-2">
-                        Hedefiniz Nedir? (Örn: "Yağ yakıp kas kütlesi kazanmak istiyorum.")
-                      </label>
-                      <input id="goal" type="text" placeholder="Hedefinizi detaylıca girin" class="vke-input">
-                    </div>
-
-                    <button id="generate-advice" onclick="generateFitnessAdvice()" class="w-full py-3 bg-yellow-700 hover:bg-yellow-600 text-white font-extrabold rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.01] hover:brightness-110">
-                        Tavsiye Oluştur ✨
-                    </button>
-                    
-                    <div id="ai-advice-card" class="hidden bg-gray-900 p-4 rounded-lg border-l-8 border-yellow-700 mt-4 text-left shadow-lg">
-                        <p class="text-sm font-semibold text-yellow-500 mb-2">Kişiselleştirilmiş Tavsiye:</p>
-                        <p id="ai-advice-text" class="text-gray-300 whitespace-pre-wrap"></p>
-                    </div>
+                <div id="metric-card-3" class="metric-card-initial p-6 bg-gray-800/80 rounded-xl border border-yellow-700 shadow-xl shadow-yellow-900/30">
+                    <span id="metric-3" class="text-3xl sm:text-4xl font-extrabold text-yellow-400">0+</span>
+                    <p class="text-sm text-gray-400 mt-2 font-medium">Başarı Hikayesi</p>
                 </div>
             </div>
         </section>
+        <section class="w-full" id="vke">
+            <div class="bg-gray-800/80 p-8 sm:p-10 rounded-2xl border border-gray-700 shadow-2xl shadow-yellow-900/40 max-w-xl mx-auto space-y-6">
+                
+                <h2 class="text-3xl font-bold text-yellow-400 text-center">
+                    BMH (BMR) ve Günlük Kalori İhtiyacı
+                </h2>
+                <p class="text-gray-400 text-sm text-center">
+                    *Mifflin-St Jeor denklemi kullanılarak hesaplanır.
+                </p>
 
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="age" class="block text-sm font-medium text-gray-300 mb-2">Yaş</label>
+                            <input id="age" type="number" placeholder="Örn: 30" class="calc-input" value="">
+                        </div>
+                        <div>
+                            <label for="gender" class="block text-sm font-medium text-gray-300 mb-2">Cinsiyet</label>
+                            <select id="gender" class="calc-input">
+                                <option value="" disabled selected>Seçiniz</option>
+                                <option value="male">Erkek</option>
+                                <option value="female">Kadın</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="weight" class="block text-sm font-medium text-gray-300 mb-2">Ağırlık (kg)</label>
+                            <input id="weight" type="number" placeholder="Örn: 75" class="calc-input" value="">
+                        </div>
+                        <div>
+                            <label for="height" class="block text-sm font-medium text-gray-300 mb-2">Boy (cm)</label>
+                            <input id="height" type="number" placeholder="Örn: 178" class="calc-input" value="">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="activity" class="block text-sm font-medium text-gray-300 mb-2">Haftalık Aktivite Seviyesi</label>
+                        <select id="activity" class="calc-input">
+                            <option value="" disabled selected>Seçiniz</option>
+                            <option value="1.2">Hareketsiz (Çok az egzersiz)</option>
+                            <option value="1.375">Hafif Aktif (Haftada 1-3 gün spor)</option>
+                            <option value="1.55">Orta Aktif (Haftada 3-5 gün spor)</option>
+                            <option value="1.725">Çok Aktif (Haftada 6-7 gün yoğun spor)</option>
+                            <option value="1.9">Aşırı Aktif (Günde iki kez antrenman)</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <button id="calculate-bmr" onclick="calculateBMR_TDEE()" class="w-full py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.01] hover:brightness-110">
+                    BMH ve Kalori İhtiyacını Hesapla
+                </button>
+
+                <div id="bmr-result-card" class="hidden bg-gray-900 p-4 rounded-lg border-l-4 border-yellow-500 mt-4 text-center space-y-2">
+                    <p class="text-sm text-gray-400">Sonuçlarınız (Günlük Kalori):</p>
+                    <p class="text-xl">
+                        Bazal Metabolizma Hızı (BMH): <span id="bmr-value" class="text-red-400 font-bold"></span> kcal
+                    </p>
+                    <p class="text-3xl mt-1">
+                        TDEE (Koruma İhtiyacı): <span id="tdee-value" class="text-green-400 font-extrabold"></span> kcal
+                    </p>
+                    <p class="text-sm text-gray-400 pt-2">
+                        *TDEE, mevcut kilonuzu korumak için gereken tahmini günlük kaloridir.
+                    </p>
+                </div>
+           
+                </div>
+        </section>
+        
         <section id="makale" class="w-full text-center space-y-10 pt-10">
             <h2 class="text-4xl font-bold text-yellow-400">Temel Bilimsel Alanlar</h2>
             <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
@@ -249,31 +301,37 @@
 
         </section>
         
-        <section id="iletisim" class="w-full text-center space-y-4 max-w-2xl pt-10">
+        <section id="iletisim" class="w-full text-center space-y-4 max-w-4xl pt-10 mx-auto">
             <h3 class="text-3xl font-bold text-yellow-400">Hemen Şimdi İletişime Geçin</h3>
             <p class="text-gray-400 text-base mb-8">
-                Bize hedeflerinizi detaylıca anlatın. Formu doldurun veya anında WhatsApp üzerinden bize ulaşın.
+                Hayatınızı bilimle değiştirin. Profesyonel spor danışmanlarımızla iletişime geçmek için aşağıdaki formu veya WhatsApp'ı kullanın.
             </p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
                 <div class="bg-gray-800/80 p-6 rounded-xl border border-gray-700 shadow-xl">
                     <h4 class="text-xl font-semibold text-yellow-400 mb-4">Bilgi Talep Formu</h4>
-                    <form id="contact-form" class="space-y-4">
+                    
+                    <form 
+                        id="contact-form" 
+                        class="space-y-4" 
+                        action="https://formspree.io/f/FORM_ID_BURAYA_GELMELI" 
+                        method="POST"
+                    >
+                        
+                        <input type="hidden" name="_next" value="#iletisim" />
+
                         <div>
-                            <input type="text" name="name" placeholder="Adınız Soyadınız" required class="vke-input">
+                            <input type="text" name="Ad_Soyad" placeholder="Adınız Soyadınız" required class="calc-input">
                         </div>
                         <div>
-                            <input type="email" name="email" placeholder="E-posta Adresiniz" required class="vke-input">
+                            <input type="email" name="Eposta" placeholder="E-posta Adresiniz" required class="calc-input">
                         </div>
                         <div>
-                            <textarea name="message" placeholder="Hedefleriniz veya Sorularınız (Size özel program için detay verin)" rows="4" required class="vke-input resize-none"></textarea>
+                            <textarea name="Mesaj" placeholder="Hedefleriniz veya Sorularınız (Size özel program için detay verin)" rows="4" required class="calc-input resize-none"></textarea>
                         </div>
-                        <button type="submit" class="w-full py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.01] hover:brightness-110">
+                        <button type="submit" class="w-full py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.01]">
                             Mesaj Gönder
                         </button>
-                        <div id="form-success" class="hidden bg-green-900/50 p-3 rounded-lg border-l-4 border-green-500 text-center mt-4">
-                            <p class="text-sm text-green-400 font-semibold">Teşekkürler! Mesajınız alındı.</p>
-                        </div>
                     </form>
                 </div>
                 
@@ -284,7 +342,7 @@
                         class="py-3 px-8 bg-green-500 hover:bg-green-600 text-white font-extrabold rounded-full shadow-lg shadow-green-500/40 transition-all duration-300 transform hover:scale-105"
                         onclick="window.open('https://wa.me/905459475808', '_blank')"
                     >
-                        WhatsApp Üzerinden Başla
+                        Ücretsiz Danışmanlık Alın (WhatsApp)
                     </button>
                     <p class="text-xs text-gray-500 mt-2">Çalışma Saatleri: H.İçi 09:00 - 18:00</p>
                 </div>
@@ -304,28 +362,26 @@
         const articleData = {
             1: { 
                 preview: 'Kas dokusu, yeterli amino asit dengesine ulaştığında maksimum büyüme potansiyeline ulaşır...',
-                full: 'Kas dokusu, yeterli amino asit dengesine ulaştığında maksimum büyüme potansiyeline ulaşır. Protein alımı kas onarımı ve hacim artışı için kritik önemdedir. Özellikle direnç antrenmanı sonrası ilk 1 saat içindeki yüksek kaliteli protein tüketimi, anabolik pencerenin etkisini en üst düzeye çıkarır ve toparlanmayı hızlandırır. Bu, sadece kas hacmini değil, aynı zamanda gücü ve dayanıklılığı da doğrudan etkiler. Günlük protein ihtiyacınızı, vücut ağırlığınızın kilogram başına 1.6 ila 2.2 gram arasında tutmanız önerilir.'
+                full: 'Kas dokusu, yeterli amino asit dengesine ulaştığında maksimum büyüme potansiyeline ulaşır. Protein alımı kas onarımı ve hacim artışı için kritik önemdedir. Özellikle direnç antrenmanı sonrası ilk 1 saat içindeki yüksek kaliteli protein tüketimi, anabolik pencerenin etkisini en üst düzeye çıkarır ve toparlanmayı hızlandırır. Günlük protein ihtiyacınızı, vücut ağırlığınızın kilogram başına 1.6 ila 2.2 gram arasında tutmanız önerilir.'
             },
             2: { 
                 preview: 'Kaliteli uyku, büyüme hormonu salınımının en yoğun olduğu dönemdir...',
-                full: 'Kaliteli uyku, büyüme hormonu salınımının en yoğun olduğu dönemdir ve kas dokusu tamirini bu evrede tamamlar. Uykusuzluk, kortizol (stres hormonu) seviyelerini artırarak kas yıkımını tetikler ve testosteron üretimini düşürür. Optimum gelişim için kesintisiz 7-9 saat uyku şarttır. Akşam saatlerinde mavi ışığa maruz kalmaktan kaçınmak ve serin bir ortamda uyumak, bu kritik toparlanma evresini destekler.'
+                full: 'Kaliteli uyku, büyüme hormonu salınımının en yoğun olduğu dönemdir ve kas dokusu tamirini bu evrede tamamlar. Uykusuzluk, kortizol (stres hormonu) seviyelerini artırarak kas yıkımını tetikler ve testosteron üretimini düşürür. Optimum gelişim için kesintisiz 7-9 saat uyku şarttır.'
             },
             3: { 
                 preview: 'Her kas, antrenmanda değil dinlenmede büyür. Aşırı yüklenme kasın değil...',
-                full: 'Her kas, antrenmanda değil dinlenmede büyür. Aşırı yüklenme kasın değil, sinir sisteminin verimini düşürür (Overtraining). Doğru tempo ve setler arası dinlenme süreleri, uzun vadeli kazanım getirir. Bir kas grubuna en az 48 saat dinlenme vermeyi hedefleyin ve aktif toparlanma (hafif kardiyo, esneme) ile kan akışını artırarak laktik asit atımını hızlandırın. Bu, sürdürülebilir bir gelişim için anahtardır.'
+                full: 'Her kas, antrenmanda değil dinlenmede büyür. Aşırı yüklenme kasın değil, sinir sisteminin verimini düşürür (Overtraining). Doğru tempo ve setler arası dinlenme süreleri, uzun vadeli kazanım getirir. Bir kas grubuna en az 48 saat dinlenme vermeyi hedefleyin.'
             }
         };
 
-        let currentBmiResult = null;
         let isArticleExpanded = {};
+        let metricsAnimated = false; 
 
-        // Fonksiyonel Tailwind Sınıfları
-        const VKE_INPUT_CLASSES = "w-full p-3 rounded-lg bg-gray-900 border border-gray-700 text-white focus:ring-yellow-500 focus:border-yellow-500 transition-all";
-        const NAV_BUTTON_CLASSES = "flex-shrink-0 py-2 px-3 text-xs sm:text-sm font-medium rounded-full transition-all duration-300 transform hover:scale-105 hover:brightness-110 text-gray-300 hover:text-yellow-400 hover:bg-gray-800";
+        // Tailwind Sınıfları
+        const NAV_BUTTON_CLASSES = "flex-shrink-0 py-2 px-3 text-xs sm:text-sm font-medium rounded-full transition-colors transform hover:scale-105 hover:brightness-110 text-gray-300 hover:text-yellow-400 hover:bg-gray-800";
         const NAV_BUTTON_ACTIVE_CLASSES = "bg-yellow-600 text-black shadow-lg shadow-yellow-500/50";
-        const ARTICLE_CARD_CLASSES = "rounded-xl overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-yellow-500/50 transform hover:-translate-y-1 hover:brightness-105";
+        const ARTICLE_CARD_CLASSES = "rounded-xl overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-yellow-500/30 transform hover:-translate-y-1 hover:brightness-105";
 
-        document.querySelectorAll('.vke-input').forEach(el => el.className = VKE_INPUT_CLASSES);
         document.querySelectorAll('.nav-button').forEach(el => el.className = NAV_BUTTON_CLASSES);
         document.querySelectorAll('.mobile-nav-button').forEach(el => el.className = NAV_BUTTON_CLASSES.replace('text-xs sm:text-sm', 'text-base'));
         document.querySelectorAll('.article-card').forEach(el => el.className = ARTICLE_CARD_CLASSES);
@@ -341,36 +397,17 @@
         // Navigasyon ve Menü İşlevleri
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
-            const menuIcon = document.getElementById('menu-icon');
-            const closeIcon = document.getElementById('close-icon');
-
             if (menu.classList.contains('menu-open')) {
                 menu.classList.remove('menu-open');
                 menu.classList.add('menu-hidden');
-                menuIcon.classList.remove('hidden');
-                closeIcon.classList.add('hidden');
             } else {
                 menu.classList.add('menu-open');
                 menu.classList.remove('menu-hidden');
-                menuIcon.classList.add('hidden');
-                closeIcon.classList.remove('hidden');
             }
         }
 
         function scrollToSection(id) {
             document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-            
-            // Aktif tab'ı güncelle
-            const activeNav = document.querySelector('.nav-button.' + NAV_BUTTON_ACTIVE_CLASSES);
-            if (activeNav) {
-                activeNav.className = NAV_BUTTON_CLASSES;
-            }
-            
-            const targetButton = document.querySelector(`.nav-button[onclick*="'${id}'"]`);
-            if (targetButton) {
-                targetButton.classList.add(...NAV_BUTTON_ACTIVE_CLASSES.split(' '));
-            }
-            
             // Mobil menüyü kapat
             if (document.getElementById('mobile-menu').classList.contains('menu-open')) {
                 toggleMenu();
@@ -393,99 +430,101 @@
             }
         }
 
-        // VKE Hesaplama İşlevi
-        function calculateBMI() {
+        // BMH ve TDEE Hesaplama İşlevi
+        function calculateBMR_TDEE() {
             const weight = parseFloat(document.getElementById('weight').value);
             const height = parseFloat(document.getElementById('height').value);
-            const resultCard = document.getElementById('bmi-result-card');
-            const bmiValueEl = document.getElementById('bmi-value');
-            const bmiStatusEl = document.getElementById('bmi-status');
+            const age = parseFloat(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const activityMultiplier = parseFloat(document.getElementById('activity').value);
+            
+            const resultCard = document.getElementById('bmr-result-card');
+            const bmrValueEl = document.getElementById('bmr-value');
+            const tdeeValueEl = document.getElementById('tdee-value');
 
-            // Hata Kontrolü
-            if (isNaN(weight) || weight <= 0) {
-                currentBmiResult = { value: null, status: 'Hata: Lütfen geçerli bir ağırlık (kg) girin.' };
-            } else if (isNaN(height) || height <= 0) {
-                currentBmiResult = { value: null, status: 'Hata: Lütfen geçerli bir boy (cm) girin.' };
-            } else {
-                const hM = height / 100;
-                const bmiValue = weight / (hM * hM);
-                const roundedBmi = parseFloat(bmiValue.toFixed(2));
-
-                let status;
-                let textClass;
-                let borderClass;
-
-                if (bmiValue < 18.5) {
-                    status = 'Zayıf (Riskli)';
-                    textClass = 'text-red-500 font-bold';
-                    borderClass = 'border-red-500';
-                } else if (bmiValue >= 18.5 && bmiValue < 25) {
-                    status = 'Normal (Sağlıklı)';
-                    textClass = 'text-green-400 font-bold';
-                    borderClass = 'border-green-400';
-                } else if (bmiValue >= 25 && bmiValue < 30) {
-                    status = 'Fazla Kilolu';
-                    textClass = 'text-orange-400 font-bold';
-                    borderClass = 'border-orange-400';
-                } else {
-                    status = 'Obez';
-                    textClass = 'text-red-500 font-bold';
-                    borderClass = 'border-red-500';
-                }
-                currentBmiResult = { value: roundedBmi, status, textClass, borderClass };
+            if (isNaN(weight) || weight <= 0 || isNaN(height) || height <= 0 || isNaN(age) || age <= 0 || !gender || isNaN(activityMultiplier)) {
+                alert('Lütfen tüm alanları doğru ve geçerli değerlerle doldurun.');
+                resultCard.classList.add('hidden');
+                return;
             }
+
+            let bmr;
+            // Mifflin-St Jeor Denklemi
+            // Erkek: 10 * kg + 6.25 * cm - 5 * yaş + 5
+            // Kadın: 10 * kg + 6.25 * cm - 5 * yaş - 161
+            if (gender === 'male') {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+            } else { // female
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+            }
+
+            const tdee = bmr * activityMultiplier;
+
+            const roundedBmr = Math.round(bmr);
+            const roundedTdee = Math.round(tdee);
+
 
             // UI Güncelleme
-            if (currentBmiResult.value) {
-                bmiValueEl.textContent = currentBmiResult.value;
-                bmiStatusEl.textContent = `Durum: ${currentBmiResult.status}`;
-                bmiValueEl.className = currentBmiResult.textClass;
-                bmiStatusEl.className = `text-lg mt-1 ${currentBmiResult.textClass}`;
-                resultCard.className = `bg-gray-900 p-4 rounded-lg border-l-4 ${currentBmiResult.borderClass} mt-4 text-center`;
-            } else {
-                 bmiValueEl.textContent = 'Hata';
-                 bmiStatusEl.textContent = currentBmiResult.status;
-                 bmiValueEl.className = 'text-red-500 font-bold';
-                 bmiStatusEl.className = 'text-lg mt-1 text-red-500 font-bold';
-                 resultCard.className = 'bg-gray-900 p-4 rounded-lg border-l-4 border-red-500 mt-4 text-center';
-            }
+            bmrValueEl.textContent = roundedBmr.toLocaleString('tr-TR');
+            tdeeValueEl.textContent = roundedTdee.toLocaleString('tr-TR');
+            
             resultCard.classList.remove('hidden');
-            document.getElementById('ai-advice-card').classList.add('hidden'); // AI sonucunu sıfırla
         }
 
-        // AI Tavsiye İşlevi (Sadece Statik Simülasyon)
-        function generateFitnessAdvice() {
-            if (!currentBmiResult || !currentBmiResult.value) {
-                alert('Lütfen önce VKE hesaplaması yapın.');
-                return;
-            }
-            
-            const userGoal = document.getElementById('goal').value.trim();
-            if (!userGoal) {
-                alert('Lütfen hedefinizi girin.');
-                return;
-            }
 
-            // Simülasyon: API'den gelen statik tavsiye
-            const bmi = currentBmiResult.value;
-            let advice;
+        // Metrik Sayaç Animasyonu
+        function animateCounter(elementId, targetValue, duration, symbol = '', decimalPlaces = 0) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
 
-            if (bmi < 18.5) {
-                advice = "VKE'niz zayıf kategorisinde. Temel hedefiniz kas kütlesi ve ağırlık artışı olmalıdır. Haftada 3 gün tam vücut antrenmanı yapın ve kalori fazlası oluşturmaya odaklanın. Kompleks karbonhidratlar (yulaf, pirinç) ve sağlıklı yağlar (avokado, kuruyemiş) tüketiminizi artırın. Her ana öğünde protein olmasına dikkat edin (ortalama 30-40 gram).";
-            } else if (bmi >= 18.5 && bmi < 25) {
-                advice = "VKE'niz ideal aralıkta. Hedefiniz kas kütlesi kazanmaksa, antrenman hacmini artırın ve protein alımını kg başına 1.8-2.2 gramda tutun. Yağ yakmaksa, hafif kalori açığı (300-500 kcal) ile güç antrenmanına devam edin. Başarınız için dengeli makro dağılımı kritik öneme sahiptir.";
-            } else {
-                advice = "VKE'niz fazla kilolu/obez kategorisinde. Öncelikli hedefiniz yağ yakımı ve kilo kaybı olmalıdır. Haftada 4-5 gün direnç antrenmanına ek olarak kardiyo (tempolu yürüyüş/eliptik) ekleyin. Günlük 500-750 kcal açık oluşturarak yüksek proteinli, lifli ve düşük glisemik indeksli beslenin. Ani şok diyetlerden kaçının.";
+            const startValue = 0;
+            const startTime = performance.now();
+
+            function updateCounter(currentTime) {
+                const elapsedTime = currentTime - startTime;
+                const progress = Math.min(1, elapsedTime / duration);
+                const currentValue = startValue + progress * (targetValue - startValue);
+
+                element.textContent = currentValue.toFixed(decimalPlaces) + symbol;
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = targetValue.toFixed(decimalPlaces) + symbol;
+                }
             }
-            
-            // UI Güncelleme
-            const adviceCard = document.getElementById('ai-advice-card');
-            const adviceText = document.getElementById('ai-advice-text');
-            
-            adviceText.textContent = advice;
-            adviceCard.classList.remove('hidden');
+            requestAnimationFrame(updateCounter);
         }
+        
+        // Metriklerin Canlanma Kontrolü
+        function checkMetricsVisibility() {
+            if (metricsAnimated) return;
 
+            const metricSection = document.getElementById('metric-card-1');
+            if (!metricSection) return;
+
+            const rect = metricSection.getBoundingClientRect();
+            // Ekranın %80'ine girdiğinde canlan
+            if (rect.top <= window.innerHeight * 0.8 && rect.bottom >= 0) {
+                
+                // Animasyonları başlat
+                animateCounter('metric-1', 98, 1500, '%', 0);
+                animateCounter('metric-2', 4.2, 1500, 'kg', 1);
+                animateCounter('metric-3', 1240, 1500, '+', 0);
+
+                // CSS geçişini tetikle
+                document.getElementById('metric-card-1').classList.remove('metric-card-initial');
+                document.getElementById('metric-card-1').classList.add('metric-card-visible');
+                document.getElementById('metric-card-2').classList.remove('metric-card-initial');
+                document.getElementById('metric-card-2').classList.add('metric-card-visible');
+                document.getElementById('metric-card-3').classList.remove('metric-card-initial');
+                document.getElementById('metric-card-3').classList.add('metric-card-visible');
+
+                metricsAnimated = true; // Tekrar çalışmasını engelle
+                window.removeEventListener('scroll', checkMetricsVisibility);
+            }
+        }
+        
         // Grafik Oluşturma İşlevi (Chart.js)
         function renderProgressChart() {
             const ctx = document.getElementById('progressChart').getContext('2d');
@@ -510,10 +549,7 @@
             const options = {
                 responsive: true,
                 maintainAspectRatio: false,
-                animation: {
-                    duration: 2500, // Daha yavaş animasyon
-                    easing: 'easeOutQuart',
-                },
+                animation: { duration: 2500, easing: 'easeOutQuart', },
                 plugins: {
                     legend: { position: 'top', labels: { color: 'rgb(209, 213, 219)', font: { size: 14 } } },
                     title: { display: true, text: 'Programlarla 1 Yıllık Tahmini Gelişim Simülasyonu', color: 'rgb(252, 211, 77)', font: { size: 18, weight: 'bold' } },
@@ -528,30 +564,14 @@
             new Chart(ctx, { type: 'line', data: data, options: options });
         }
 
-        // İletişim Formu İşlevi
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const form = e.target;
-            const successMessage = document.getElementById('form-success');
-            
-            // Verileri al ve konsola yaz (Gerçek uygulamada burası API çağrısı olur)
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-            console.log("Form Data Submitted:", data);
-            
-            // Başarılı mesajını göster ve formu temizle
-            form.reset();
-            successMessage.classList.remove('hidden');
-
-            // 5 saniye sonra mesajı gizle
-            setTimeout(() => {
-                successMessage.classList.add('hidden');
-            }, 5000);
+        // Sayfa yüklendiğinde çalışacak kodlar
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProgressChart();
+            // Scroll olayını dinlemeye başla
+            window.addEventListener('scroll', checkMetricsVisibility);
+            // Sayfa yüklenir yüklenmez ilk kontrolü yap
+            checkMetricsVisibility();
         });
-
-        // Sayfa yüklendiğinde grafiği çiz
-        document.addEventListener('DOMContentLoaded', renderProgressChart);
     </script>
 
 </body>
