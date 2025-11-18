@@ -6,9 +6,7 @@
     <title>PhysioCore - Bilimsel Kas Gelişimi & Koçluk Paketleri</title>
     <meta name="description" content="PhysioCore: Bilimsel verilerle desteklenmiş, kişiye özel kas gelişimi ve fitness programları. Vücut analizinizi yapın, TDEE hesaplayın ve profesyonellerle iletişime geçin.">
     <meta name="keywords" content="kas gelişimi, fitness programı, bilimsel antrenman, physio core, kişiye özel, beslenme, tdee, bmh hesaplama, koçluk paketleri, spor fizyolojisi">
-    <!-- Tailwind CSS Yüklemesi -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js Yüklemesi -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
     <style>
@@ -63,7 +61,6 @@
 </head>
 <body class="bg-gray-900 text-gray-300">
 
-    <!-- Navbar -->
     <nav class="sticky top-0 z-50 bg-gray-900/90 backdrop-blur-sm shadow-xl shadow-gray-800/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -72,7 +69,6 @@
                         <span class="text-2xl font-extrabold text-yellow-400">PhysioCore</span>
                     </div>
                 </div>
-                <!-- Desktop Menü -->
                 <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
                     <a href="#hakkimizda" class="text-gray-300 hover:text-yellow-400 inline-flex items-center px-1 pt-1 text-sm font-medium transition duration-150">Hakkımızda</a>
                     <a href="#program" class="text-gray-300 hover:text-yellow-400 inline-flex items-center px-1 pt-1 text-sm font-medium transition duration-150">Programlar</a>
@@ -80,7 +76,6 @@
                     <a href="#hesaplayici" class="text-gray-300 hover:text-yellow-400 inline-flex items-center px-1 pt-1 text-sm font-medium transition duration-150">Hesaplayıcı</a>
                     <a href="#makaleler" class="text-gray-300 hover:text-yellow-400 inline-flex items-center px-1 pt-1 text-sm font-medium transition duration-150">Makaleler</a>
                 </div>
-                <!-- Mobil Menü Butonu -->
                 <div class="-mr-2 flex items-center sm:hidden">
                     <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-500" aria-controls="mobile-menu" aria-expanded="false">
                         <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -90,7 +85,6 @@
                 </div>
             </div>
         </div>
-        <!-- Mobil Menü İçeriği -->
         <div class="sm:hidden menu-hidden" id="mobile-menu">
             <div class="pt-2 pb-3 space-y-1">
                 <a href="#hakkimizda" onclick="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700">Hakkımızda</a>
@@ -102,10 +96,8 @@
         </div>
     </nav>
 
-    <!-- Ana İçerik -->
     <main class="py-12">
         
-        <!-- Hero Section -->
         <section id="hero" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 pb-16">
             <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-4 leading-tight">
                 <span class="text-yellow-400">Bilimsel</span> Verilerle Güçlendirilmiş <br class="hidden md:inline"> Kişisel Koçluk
@@ -117,7 +109,6 @@
                 Programları İncele & Başla
             </a>
 
-            <!-- Metrikler ve Güven Sayacı -->
             <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8">
                 <div class="bg-gray-800 p-4 rounded-xl shadow-inner shadow-gray-700">
                     <p class="text-3xl font-bold text-yellow-400" id="metric-1">0</p>
@@ -138,23 +129,19 @@
             </div>
         </section>
 
-        <!-- Hakkımızda/Vizyon Section -->
         <section id="hakkimizda" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <h2 class="text-4xl font-bold text-white text-center mb-12">Neden PhysioCore?</h2>
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- 1. Güven Unsuru: Bilimsel Yaklaşım -->
                 <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-yellow-500/30 transition-shadow transition-transform hover:scale-[1.02]">
                     <span class="text-4xl text-yellow-400 block mb-3">🧪</span>
                     <h3 class="text-xl font-semibold text-white mb-2">Kanıta Dayalı Programlama</h3>
                     <p class="text-gray-400">Antrenman ve beslenme stratejilerimiz, en güncel spor fizyolojisi araştırmaları ve akademik çalışmalarla desteklenir. Tahminlere değil, verilere inanıyoruz.</p>
                 </div>
-                <!-- 2. Güven Unsuru: Kişiselleştirme -->
                 <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-yellow-500/30 transition-shadow transition-transform hover:scale-[1.02]">
                     <span class="text-4xl text-yellow-400 block mb-3">🎯</span>
                     <h3 class="text-xl font-semibold text-white mb-2">Bireyselleştirilmiş Takip</h3>
                     <p class="text-gray-400">Yaş, cinsiyet, aktivite seviyesi ve özellikle BMR/TDEE analizine dayalı olarak size özel makro dağılımı ve antrenman hacmi belirlenir.</p>
                 </div>
-                <!-- 3. Güven Unsuru: Gerçek Sonuçlar -->
                 <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-yellow-500/30 transition-shadow transition-transform hover:scale-[1.02]">
                     <span class="text-4xl text-yellow-400 block mb-3">📈</span>
                     <h3 class="text-xl font-semibold text-white mb-2">Sürekli Optimizasyon</h3>
@@ -163,14 +150,12 @@
             </div>
         </section>
 
-        <!-- Bilimsel Dayanaklar Bölümü (Güncellendi - Otorite Artırıcı) -->
         <section id="kadro" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 bg-gray-800 rounded-2xl shadow-2xl">
             <h2 class="text-4xl font-bold text-white text-center mb-4">Bilimsel Dayanaklarımız: Alanındaki Otoriteler</h2>
             <p class="text-lg text-gray-400 text-center mb-12">Programlarımız, bu alandaki en etkili bilim insanlarının kanıta dayalı çalışmalarına dayanmaktadır.</p>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
-                <!-- Otorite 1: Brad Schoenfeld (Hipertrofi Uzmanı) -->
                 <div class="flex flex-col items-center p-6 bg-gray-900 rounded-xl shadow-xl transition-shadow hover:shadow-yellow-500/40">
                     <img src="https://placehold.co/100x100/374151/E5E7EB?text=B.Schoenfeld" alt="Brad Schoenfeld" class="w-24 h-24 rounded-full object-cover mb-4 ring-2 ring-yellow-500">
                     <h4 class="text-2xl font-bold text-white">Brad Schoenfeld, PhD</h4>
@@ -179,7 +164,6 @@
                     <p class="text-sm text-gray-400 text-center">Tüm antrenman programlarımız, Dr. Schoenfeld'in kas gelişimine yönelik hacim, sıklık ve yoğunluk çalışmalarına göre optimize edilmiştir.</p>
                 </div>
 
-                <!-- Otorite 2: Alan Aragon (Beslenme Uzmanı) -->
                 <div class="flex flex-col items-center p-6 bg-gray-900 rounded-xl shadow-xl transition-shadow hover:shadow-yellow-500/40">
                     <img src="https://placehold.co/100x100/374151/E5E7EB?text=A.Aragon" alt="Alan Aragon" class="w-24 h-24 rounded-full object-cover mb-4 ring-2 ring-yellow-500">
                     <h4 class="text-2xl font-bold text-white">Alan Aragon, MS</h4>
@@ -188,7 +172,6 @@
                     <p class="text-sm text-gray-400 text-center">Beslenme planlarımız, Alan Aragon'un kişiselleştirilmiş makro dağılımları ve esnek diyet (IF) protokolleri hakkındaki kanıtlanmış prensipleri üzerine kuruludur.</p>
                 </div>
 
-                <!-- Otorite 3: Stuart Phillips (Protein ve Yaşlanma) -->
                 <div class="flex flex-col items-center p-6 bg-gray-900 rounded-xl shadow-xl transition-shadow hover:shadow-yellow-500/40">
                     <img src="https://placehold.co/100x100/374151/E5E7EB?text=S.Phillips" alt="Stuart Phillips" class="w-24 h-24 rounded-full object-cover mb-4 ring-2 ring-yellow-500">
                     <h4 class="text-2xl font-bold text-white">Stuart Phillips, PhD</h4>
@@ -201,21 +184,17 @@
         </section>
 
 
-        <!-- Programlar ve Fırsat Section (Geliştirildi) -->
         <section id="program" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <h2 class="text-4xl font-bold text-white text-center mb-4">Sana Özel Koçluk Paketleri</h2>
             <p class="text-lg text-gray-400 text-center mb-12">Sadece doğru programla hedefine ulaşabilirsin. Süre uzadıkça fırsat büyür!</p>
 
             <div class="grid md:grid-cols-3 gap-8">
                 
-                <!-- Paket 1: Demo (GÜNCELLENDİ) -->
                 <div class="bg-gray-800 p-6 rounded-2xl shadow-lg ring-2 ring-gray-700 transition-transform hover:scale-[1.03] hover:shadow-2xl">
                     <h3 class="text-3xl font-bold text-white mb-2">Demo</h3>
                     <p class="text-sm text-gray-400 mb-4">Hizmetlerimizi denemek için ideal başlangıç.</p>
-                    <p class="text-4xl font-extrabold text-yellow-400 mb-2">300 TL</p> <!-- Fiyat Güncellendi -->
-                    <p class="text-sm text-gray-500 mb-2">Paket Süresi: 1 Ay</p>
+                    <p class="text-4xl font-extrabold text-yellow-400 mb-2">300 TL</p> <p class="text-sm text-gray-500 mb-2">Paket Süresi: 1 Ay</p>
                     
-                    <!-- Tek Seferlik Notu Eklendi -->
                     <div class="bg-red-800/50 p-2 rounded-lg mb-4">
                         <p class="text-xs font-bold text-red-300 text-center">BU PAKET SADECE BİR KEZ ALINABİLİR.</p>
                     </div>
@@ -231,14 +210,12 @@
                     </a>
                 </div>
 
-                <!-- Paket 2: Middle -->
                 <div class="bg-gray-800 p-6 rounded-2xl shadow-lg ring-2 ring-blue-500 transition-transform hover:scale-[1.03] hover:shadow-2xl">
                     <h3 class="text-3xl font-bold text-white mb-2">Middle</h3>
                     <p class="text-sm text-gray-400 mb-4">Sürdürülebilir gelişim için temel koçluk.</p>
                     <p class="text-4xl font-extrabold text-yellow-400 mb-2">1299 TL</p>
                     <p class="text-sm text-gray-500 mb-6">Paket Süresi: 2 Ay</p>
                     
-                    <!-- Fırsat Vurgusu -->
                     <div class="bg-gray-700 p-2 rounded-lg mb-4">
                         <p class="text-sm font-semibold text-gray-300">Aylık Maliyet: <span class="text-white">650 TL/Ay</span> <span class="text-green-400 ml-2">(%35 Fırsat)</span></p>
                     </div>
@@ -254,16 +231,13 @@
                     </a>
                 </div>
 
-                <!-- Paket 3: Elite (EN ÇOK VURGULANAN) -->
                 <div class="bg-gray-900 p-8 rounded-2xl elite-card relative transition-transform scale-[1.05]">
-                    <!-- En Popüler Etiketi -->
                     <span class="absolute top-0 right-0 bg-yellow-400 text-gray-900 text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-xl">EN POPÜLER</span>
                     <h3 class="text-3xl font-bold text-white mb-2">Elite</h3>
                     <p class="text-sm text-gray-400 mb-4">En Hızlı ve Garantili Sonuçlar için Tam Destek!</p>
                     <p class="text-5xl font-extrabold text-yellow-400 mb-2">1499 TL</p>
                     <p class="text-sm text-gray-500 mb-6">Paket Süresi: 3 Ay</p>
                     
-                    <!-- Fırsat Vurgusu (En Yüksek İndirim) -->
                     <div class="bg-yellow-400/20 p-2 rounded-lg mb-4 ring-2 ring-yellow-500">
                         <p class="text-sm font-extrabold text-yellow-300">Aylık Maliyet: <span class="text-white">~500 TL/Ay</span> <span class="text-yellow-400 ml-2">(BÜYÜK FIRSAT!)</span></p>
                     </div>
@@ -274,7 +248,6 @@
                         <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Birebir Detaylı Geri Bildirim</li>
                         <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> **7/24 Whatsapp İletişimi**</li>
                     </ul>
-                    <!-- Risk Azaltma Garantisi -->
                     <div class="text-center mb-4 text-xs text-green-400 font-bold bg-green-900/40 p-2 rounded-lg">
                         ✅ 30 Gün Koşulsuz Para İade Garantisi
                     </div>
@@ -287,12 +260,10 @@
             </div>
         </section>
         
-        <!-- Başarı Hikayeleri Section -->
         <section id="basari" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <h2 class="text-4xl font-bold text-white text-center mb-4">Garantili Sonuçlar ve Dönüşüm Hikayeleri</h2>
             <p class="text-lg text-gray-400 text-center mb-12">Bizimle çalışanların sadece hedeflerine ulaştığını değil, onları aştığını görün.</p>
 
-            <!-- Örnek Başarı Kartları (Kaydırılabilir alan olabilir, burada 3 örnek) -->
             <div class="grid md:grid-cols-3 gap-8">
                 
                 <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-green-500/30 transition-shadow">
@@ -344,26 +315,22 @@
         </section>
 
 
-        <!-- Gelişim Simülasyonu -->
         <section id="simulasyon" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <div class="bg-gray-800 p-6 md:p-10 rounded-2xl shadow-xl">
                 <canvas id="developmentChart"></canvas>
             </div>
         </section>
 
-        <!-- Hesaplayıcı Section -->
         <section id="hesaplayici" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <h2 class="text-4xl font-bold text-white text-center mb-4">BMR / TDEE Hesaplayıcı</h2>
             <p class="text-lg text-gray-400 text-center mb-12">Hedefine ulaşmak için günde kaç kaloriye ihtiyacın olduğunu bilimsel olarak hesapla. Kişiselleştirme burada başlar!</p>
 
             <div class="max-w-xl mx-auto bg-gray-800 p-8 rounded-2xl shadow-2xl">
                 <form id="tdee-form" class="space-y-4">
-                    <!-- Yaş -->
                     <div>
                         <label for="age" class="block text-sm font-medium text-gray-400">Yaşınız</label>
                         <input type="number" id="age" name="age" required min="10" max="120" class="mt-1 block w-full rounded-lg border-gray-700 bg-gray-900 shadow-sm text-white focus:ring-yellow-500 focus:border-yellow-500 p-3" placeholder="Örn: 30">
                     </div>
-                    <!-- Cinsiyet -->
                     <div>
                         <label for="gender" class="block text-sm font-medium text-gray-400">Cinsiyetiniz</label>
                         <select id="gender" name="gender" required class="mt-1 block w-full rounded-lg border-gray-700 bg-gray-900 shadow-sm text-white focus:ring-yellow-500 focus:border-yellow-500 p-3">
@@ -372,17 +339,14 @@
                             <option value="female">Kadın</option>
                         </select>
                     </div>
-                    <!-- Boy -->
                     <div>
                         <label for="height" class="block text-sm font-medium text-gray-400">Boyunuz (cm)</label>
                         <input type="number" id="height" name="height" required min="100" max="250" class="mt-1 block w-full rounded-lg border-gray-700 bg-gray-900 shadow-sm text-white focus:ring-yellow-500 focus:border-yellow-500 p-3" placeholder="Örn: 180">
                     </div>
-                    <!-- Kilo -->
                     <div>
                         <label for="weight" class="block text-sm font-medium text-gray-400">Kilonuz (kg)</label>
                         <input type="number" id="weight" name="weight" required min="30" max="300" class="mt-1 block w-full rounded-lg border-gray-700 bg-gray-900 shadow-sm text-white focus:ring-yellow-500 focus:border-yellow-500 p-3" placeholder="Örn: 80">
                     </div>
-                    <!-- Aktivite Seviyesi -->
                     <div>
                         <label for="activity" class="block text-sm font-medium text-gray-400">Aktivite Seviyeniz</label>
                         <select id="activity" name="activity" required class="mt-1 block w-full rounded-lg border-gray-700 bg-gray-900 shadow-sm text-white focus:ring-yellow-500 focus:border-yellow-500 p-3">
@@ -399,13 +363,11 @@
                     </button>
                 </form>
 
-                <!-- Sonuç Alanı -->
                 <div id="results" class="mt-8 p-6 bg-gray-900 border border-gray-700 rounded-xl hidden">
                     <h4 class="text-2xl font-bold text-white mb-4 text-center">Analiz Sonuçlarınız</h4>
                     <p class="mb-2">Bazal Metabolizma Hızı (BMR): <span id="bmr-value" class="font-bold text-yellow-400"></span> Kalori</p>
                     <p class="mb-4">Günlük Toplam Enerji Harcaması (TDEE): <span id="tdee-value" class="font-bold text-yellow-400"></span> Kalori</p>
                     
-                    <!-- Kişiselleştirilmiş CTA (Yeni - Dönüşüm Artırıcı) -->
                     <div id="cta-tdee" class="mt-6 p-4 bg-yellow-600/20 border-l-4 border-yellow-500 rounded-lg">
                         <p class="font-bold text-white mb-3">TDEE Değerinize Özel Koçluk Alın!</p>
                         <p class="text-sm text-gray-300 mb-4">Bu değerlere göre, size özel makro besin dağılımını (Protein, Yağ, Karbonhidrat) ve antrenman hacmini planlayalım.</p>
@@ -417,42 +379,37 @@
             </div>
         </section>
 
-        <!-- Makaleler Section -->
         <section id="makaleler" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <h2 class="text-4xl font-bold text-white text-center mb-4">Bilimsel Makaleler & Görüşler</h2>
             <p class="text-lg text-gray-400 text-center mb-12">Yayınladığımız içerikler ve bilimsel temellerimiz.</p>
             
             <div class="grid md:grid-cols-3 gap-8">
                 
-                <!-- Makale 1 -->
                 <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-yellow-500/30 transition-shadow">
                     <span class="text-xs font-semibold text-red-400 bg-red-900/50 px-2 py-1 rounded-full mb-3 inline-block">Fizyolog Onaylı</span>
                     <h3 class="text-2xl font-bold text-white mb-3">Protein Dengesi ve Kas Hipertrofisi</h3>
                     <p class="text-sm text-gray-400 mb-4">En güncel çalışmalar, yüksek protein alımının (vücut ağırlığının **1.6-2.2 gr/kg**) kas kütlesi kazanımı üzerindeki rolünü kanıtlıyor. Peki bu aralık neden bu kadar önemli?</p>
-                    <a href="#" class="text-yellow-400 hover:text-yellow-500 text-sm font-semibold">Devamını Oku →</a>
+                    <a href="https://wa.me/905459475808?text=Protein%20Dengesi%20ve%20Kas%20Hipertrofisi%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="text-yellow-400 hover:text-yellow-500 text-sm font-semibold">Koçunuzdan Detaylı Bilgi Alın →</a>
                 </div>
 
-                <!-- Makale 2 -->
                 <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-yellow-500/30 transition-shadow">
                     <span class="text-xs font-semibold text-blue-400 bg-blue-900/50 px-2 py-1 rounded-full mb-3 inline-block">Antrenman Bilimi</span>
                     <h3 class="text-2xl font-bold text-white mb-3">Antrenman Hacmi ve Sıklık Optimizasyonu</h3>
                     <p class="text-sm text-gray-400 mb-4">Haftalık set sayısını, kas grupları arasında nasıl dağıtmalıyız? Güncel bilim, optimal toparlanma ve maksimum gelişim için ideal sıklık formülünü ortaya koyuyor.</p>
-                    <a href="#" class="text-yellow-400 hover:text-yellow-500 text-sm font-semibold">Devamını Oku →</a>
+                    <a href="https://wa.me/905459475808?text=Antrenman%20Hacmi%20ve%20Sıklık%20Optimizasyonu%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="text-yellow-400 hover:text-yellow-500 text-sm font-semibold">Koçunuzdan Detaylı Bilgi Alın →</a>
                 </div>
 
-                <!-- Makale 3 -->
                 <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-yellow-500/30 transition-shadow">
                     <span class="text-xs font-semibold text-green-400 bg-green-900/50 px-2 py-1 rounded-full mb-3 inline-block">Beslenme</span>
                     <h3 class="text-2xl font-bold text-white mb-3">Yağ Yakımında Kardiyo Zamanlaması</h3>
                     <p class="text-sm text-gray-400 mb-4">Aç karnına kardiyo gerçekten daha mı etkili? Güncel metabolik araştırmalar, yağ yakımı hedefine ulaşmak için en iyi kardiyo stratejilerini açıklıyor.</p>
-                    <a href="#" class="text-yellow-400 hover:text-yellow-500 text-sm font-semibold">Devamını Oku →</a>
+                    <a href="https://wa.me/905459475808?text=Yağ%20Yakımında%20Kardiyo%20Zamanlaması%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="text-yellow-400 hover:text-yellow-500 text-sm font-semibold">Koçunuzdan Detaylı Bilgi Alın →</a>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Footer -->
     <footer class="bg-gray-950 border-t border-gray-800 mt-12">
         <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
             <p class="text-lg font-extrabold text-yellow-400 mb-2">PhysioCore</p>
@@ -466,15 +423,12 @@
         </div>
     </footer>
     
-    <!-- Sticky WhatsApp Button (SVG DÜZELTİLDİ) -->
     <a href="https://wa.me/905459475808?text=Koçluk%20paketleri%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="whatsapp-sticky bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl transition-colors transform">
-        <!-- Yeni, sorunsuz çalışan WhatsApp SVG kodu -->
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.52 3.42 1.49 4.87l-1.5 5.48 5.61-1.46c1.42.77 3 1.18 4.31 1.18 5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91zm0 18.06c-1.35 0-2.66-.39-3.79-1.11l-.27-.16-2.82.74.76-2.75-.18-.28c-.76-1.2-.12-3.14-.12-4.13 0-4.54 3.7-8.24 8.24-8.24s8.24 3.7 8.24 8.24-3.7 8.24-8.24 8.24zm5.5-6.19c-.3-.15-1.77-.88-2.05-.98-.29-.1-.5-.15-.71.15-.2.3-.8.98-.98 1.18-.19.2-.39.22-.72.08-.34-.14-1.44-.54-2.74-1.69-.64-.56-1.07-1.26-1.42-1.85-.35-.59-.04-.9-.04-.9s-.35-.85-.5-1.15c-.15-.3-.32-.26-.5-.26h-.69c-.21 0-.55.08-.85.42-.3.34-1.14 1.12-1.14 2.74s1.17 3.17 1.33 3.4c.15.22 2.3 3.5 5.56 4.88 3.25 1.38 3.25.92 3.84.86.59-.06 1.78-.72 2.03-1.44.25-.71.25-1.31.17-1.45-.07-.13-.29-.21-.61-.38z"/>
         </svg>
     </a>
 
-    <!-- JavaScript Alanı -->
     <script>
         // Sayfalara akıcı geçiş için mobil menü kontrolü
         function toggleMenu() {
@@ -633,9 +587,8 @@
             document.getElementById('bmr-value').textContent = Math.round(bmr).toLocaleString('tr-TR');
             document.getElementById('tdee-value').textContent = Math.round(tdee).toLocaleString('tr-TR');
             
-            // CTA metnine TDEE değerini ekle
-            document.getElementById('tdee-cta-value').textContent = Math.round(tdee).toLocaleString('tr-TR');
-
+            // HATA VEREN tdee-cta-value satırı KALDIRILDI. Artık sonuç alanı düzgün çalışıyor.
+            
             document.getElementById('results').classList.remove('hidden');
             
             // Sonuçlara kaydır
