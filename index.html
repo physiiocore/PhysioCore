@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhysioCore - Bilimsel Kas Gelişimi</title>
-    <meta name="description" content="PhysioCore: Bilimsel verilerle desteklenmiş, kişiye özel kas gelişimi ve fitness programları. Vücut analizinizi yapın ve profesyonellerle iletişime geçin.">
-    <meta name="keywords" content="kas gelişimi, fitness programı, bilimsel antrenman, physio core, kişiye özel, beslenme, tdee, bmh hesaplama">
+    <title>PhysioCore - Bilimsel Kas Gelişimi & Koçluk Paketleri</title>
+    <meta name="description" content="PhysioCore: Bilimsel verilerle desteklenmiş, kişiye özel kas gelişimi ve fitness programları. Vücut analizinizi yapın, TDEE hesaplayın ve profesyonellerle iletişime geçin.">
+    <meta name="keywords" content="kas gelişimi, fitness programı, bilimsel antrenman, physio core, kişiye özel, beslenme, tdee, bmh hesaplama, koçluk paketleri, spor fizyolojisi">
+    <!-- Tailwind CSS Yüklemesi -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js Yüklemesi -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
     <style>
@@ -14,6 +16,8 @@
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
+            background-color: #111827; /* Koyu arka plan */
+            color: #D1D5DB; /* Açık metin rengi */
         }
         /* Basit bir CSS geçişi */
         .transition-transform {
@@ -26,606 +30,618 @@
             transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
             overflow: hidden;
         }
-        .menu-open {
-            max-height: 500px; 
+        .menu-visible {
+            max-height: 500px; /* Yeterince büyük bir değer */
             opacity: 1;
         }
-        /* Hesaplayıcı inputları için ortak stil */
-        .calc-input {
-            width: 100%; 
-            padding: 0.75rem; 
-            border-radius: 0.5rem; 
-            background-color: rgb(17 24 39); /* gray-900 */ 
-            border: 1px solid rgb(55 65 81); /* gray-700 */ 
-            color: white; 
-            transition: all 0.3s;
-            appearance: none; /* Select okunu düzenlemek için */
+        /* Elite Paket Vurgusu için Özel Stil */
+        .elite-card {
+            box-shadow: 0 10px 25px -3px rgba(252, 211, 77, 0.5); /* Sarı glow efekti */
+            border-width: 4px;
+            border-color: #FCD34D;
         }
-        .calc-input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgb(245 158 11); /* ring-yellow-500 */
-            border-color: rgb(245 158 11); /* border-yellow-500 */
+        /* Sticky WhatsApp Button */
+        .whatsapp-sticky {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            animation: bounce-scale 2s infinite;
         }
-        
-        /* Sayaç Animasyonları için görünürlük sınıfı */
-        .metric-card-initial {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-        }
-        .metric-card-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Liste elemanları için SVG ikonları */
-        .feature-check {
-            color: #4ade80; /* green-400 */
-        }
-        .feature-x {
-            color: #6b7280; /* gray-500 */
+        @keyframes bounce-scale {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            40% {
+                transform: translateY(-5px) scale(1.05);
+            }
+            60% {
+                transform: translateY(-2px) scale(1.02);
+            }
         }
     </style>
 </head>
+<body class="bg-gray-900 text-gray-300">
 
-<body class="min-h-screen bg-gradient-to-b from-slate-950 via-gray-900 to-black text-white">
-
-    <header id="header" class="sticky top-0 z-20 bg-gray-900/90 backdrop-blur-sm shadow-xl border-b border-yellow-800/50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
-            <a href="#" class="text-2xl font-extrabold text-yellow-400">
-                PhysioCore
-            </a>
-            
-            <nav id="desktop-nav" class="hidden sm:flex space-x-2 sm:space-x-4 overflow-x-auto whitespace-nowrap py-1">
-                <button onclick="scrollToSection('makale')" class="nav-button">Makaleler</button>
-                <button onclick="scrollToSection('program')" class="nav-button">Koçluk Süreçleri</button>
-                <button onclick="scrollToSection('iletisim')" class="nav-button">İletişim</button>
-            </nav>
-
-            <button id="menu-toggle" class="sm:hidden text-gray-300 hover:text-yellow-400 transition-colors" onclick="toggleMenu()">
-                <svg id="menu-icon" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-                <svg id="close-icon" class="w-6 h-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-gray-900/90 backdrop-blur-sm shadow-xl shadow-gray-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-2xl font-extrabold text-yellow-400">PhysioCore</span>
+                    </div>
+                </div>
+                <!-- Desktop Menü -->
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                    <a href="#hakkimizda" class="text-gray-300 hover:text-yellow-400 inline-flex items-center px-1 pt-1 text-sm font-medium transition duration-150">Hakkımızda</a>
+                    <a href="#program" class="text-gray-300 hover:text-yellow-400 inline-flex items-center px-1 pt-1 text-sm font-medium transition duration-150">Programlar</a>
+                    <a href="#kadro" class="text-gray-300 hover:text-yellow-400 inline-flex items-center px-1 pt-1 text-sm font-medium transition duration-150">Bilimsel Dayanak</a>
+                    <a href="#hesaplayici" class="text-gray-300 hover:text-yellow-400 inline-flex items-center px-1 pt-1 text-sm font-medium transition duration-150">Hesaplayıcı</a>
+                    <a href="#makaleler" class="text-gray-300 hover:text-yellow-400 inline-flex items-center px-1 pt-1 text-sm font-medium transition duration-150">Makaleler</a>
+                </div>
+                <!-- Mobil Menü Butonu -->
+                <div class="-mr-2 flex items-center sm:hidden">
+                    <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
-        
-        <nav id="mobile-menu" class="sm:hidden absolute top-16 left-0 right-0 bg-gray-900/95 backdrop-blur border-b border-yellow-800/50 overflow-hidden menu-hidden">
-            <div class="flex flex-col p-4 space-y-2">
-                <button onclick="scrollToSection('makale')" class="mobile-nav-button">Makaleler</button>
-                <button onclick="scrollToSection('program')" class="mobile-nav-button">Koçluk Süreçleri</button>
-                <button onclick="scrollToSection('iletisim')" class="mobile-nav-button">İletişim</button>
+        <!-- Mobil Menü İçeriği -->
+        <div class="sm:hidden menu-hidden" id="mobile-menu">
+            <div class="pt-2 pb-3 space-y-1">
+                <a href="#hakkimizda" onclick="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700">Hakkımızda</a>
+                <a href="#program" onclick="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700">Programlar</a>
+                <a href="#kadro" onclick="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700">Bilimsel Dayanak</a>
+                <a href="#hesaplayici" onclick="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700">Hesaplayıcı</a>
+                <a href="#makaleler" onclick="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700">Makaleler</a>
             </div>
-        </nav>
-    </header>
-    
-    <main class="flex flex-col items-center p-6 sm:p-10 space-y-20 max-w-7xl mx-auto">
+        </div>
+    </nav>
+
+    <!-- Ana İçerik -->
+    <main class="py-12">
         
-        <section class="text-center space-y-5 max-w-4xl pt-10">
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
-                PhysioCore — Bilimsel Kas Gelişiminin Merkezi
+        <!-- Hero Section -->
+        <section id="hero" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 pb-16">
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-4 leading-tight">
+                <span class="text-yellow-400">Bilimsel</span> Verilerle Güçlendirilmiş <br class="hidden md:inline"> Kişisel Koçluk
             </h1>
-            <p class="text-gray-300 text-base sm:text-lg leading-relaxed">
-                <strong>PhysioCore</strong>, kas gelişimi ve performans artırımı alanında bilimsel verilerle desteklenmiş, profesyonel düzeyde hazırlanan makaleler sunar.
-                Her bilgi, antrenörler ve spor fizyologları tarafından analiz edilmiştir. Bilim, strateji ve disiplin birleştiğinde sonuç kaçılmazdır.
+            <p class="text-xl text-gray-400 mb-8 max-w-3xl mx-auto">
+                Her program, uzman fizyologların çalışmalarına dayalı olarak analiz edilir ve size özel hazırlanır. Tahminlere yer yok, sadece kanıtlanmış sonuçlar!
             </p>
-        </section>
+            <a href="#program" class="inline-block bg-yellow-600 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-8 rounded-xl shadow-lg shadow-yellow-500/50 transition-colors duration-300 transform hover:scale-105">
+                Programları İncele & Başla
+            </a>
 
-        <section class="w-full pt-0">
-             <h2 class="text-4xl font-bold text-gray-100 text-center mb-10">
-                Kanıtlanmış Başarı. Bilimsel Metot.
-            </h2>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto text-center">
-                <div id="metric-card-1" class="metric-card-initial p-6 bg-gray-800/80 rounded-xl border border-yellow-700 shadow-xl shadow-yellow-900/30">
-                    <span id="metric-1" class="text-3xl sm:text-4xl font-extrabold text-yellow-400">0%</span>
-                    <p class="text-sm text-gray-400 mt-2 font-medium">Müşteri Memnuniyeti</p>
+            <!-- Metrikler ve Güven Sayacı -->
+            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="bg-gray-800 p-4 rounded-xl shadow-inner shadow-gray-700">
+                    <p class="text-3xl font-bold text-yellow-400" id="metric-1">0</p>
+                    <p class="text-sm text-gray-400">Müşteri Memnuniyeti (%)</p>
                 </div>
-
-                <div id="metric-card-2" class="metric-card-initial p-6 bg-gray-800/80 rounded-xl border border-yellow-700 shadow-xl shadow-yellow-900/30">
-                    <span id="metric-2" class="text-3xl sm:text-4xl font-extrabold text-yellow-400">0kg</span>
-                    <p class="text-sm text-gray-400 mt-2 font-medium">Ortalama Net Kas Kazanımı (3 Ay)</p>
+                <div class="bg-gray-800 p-4 rounded-xl shadow-inner shadow-gray-700">
+                    <p class="text-3xl font-bold text-yellow-400" id="metric-2">0</p>
+                    <p class="text-sm text-gray-400">Ortalama Kas Kazanımı (kg)</p>
                 </div>
-
-                <div id="metric-card-3" class="metric-card-initial p-6 bg-gray-800/80 rounded-xl border border-yellow-700 shadow-xl shadow-yellow-900/30">
-                    <span id="metric-3" class="text-3xl sm:text-4xl font-extrabold text-yellow-400">0+</span>
-                    <p class="text-sm text-gray-400 mt-2 font-medium">Başarı Hikayesi</p>
+                <div class="bg-gray-800 p-4 rounded-xl shadow-inner shadow-gray-700">
+                    <p class="text-3xl font-bold text-yellow-400" id="metric-3">0</p>
+                    <p class="text-sm text-gray-400">Toplam Koçluk Saati (K)</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-xl shadow-inner shadow-gray-700">
+                    <p class="text-3xl font-bold text-yellow-400" id="metric-4">0</p>
+                    <p class="text-sm text-gray-400">Ulaşılan Topluluk</p>
                 </div>
             </div>
         </section>
-        <section class="w-full" id="vke">
-            <div class="bg-gray-800/80 p-8 sm:p-10 rounded-2xl border border-gray-700 shadow-2xl shadow-yellow-900/40 max-w-xl mx-auto space-y-6">
+
+        <!-- Hakkımızda/Vizyon Section -->
+        <section id="hakkimizda" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <h2 class="text-4xl font-bold text-white text-center mb-12">Neden PhysioCore?</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- 1. Güven Unsuru: Bilimsel Yaklaşım -->
+                <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-yellow-500/30 transition-shadow transition-transform hover:scale-[1.02]">
+                    <span class="text-4xl text-yellow-400 block mb-3">🧪</span>
+                    <h3 class="text-xl font-semibold text-white mb-2">Kanıta Dayalı Programlama</h3>
+                    <p class="text-gray-400">Antrenman ve beslenme stratejilerimiz, en güncel spor fizyolojisi araştırmaları ve akademik çalışmalarla desteklenir. Tahminlere değil, verilere inanıyoruz.</p>
+                </div>
+                <!-- 2. Güven Unsuru: Kişiselleştirme -->
+                <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-yellow-500/30 transition-shadow transition-transform hover:scale-[1.02]">
+                    <span class="text-4xl text-yellow-400 block mb-3">🎯</span>
+                    <h3 class="text-xl font-semibold text-white mb-2">Bireyselleştirilmiş Takip</h3>
+                    <p class="text-gray-400">Yaş, cinsiyet, aktivite seviyesi ve özellikle BMR/TDEE analizine dayalı olarak size özel makro dağılımı ve antrenman hacmi belirlenir.</p>
+                </div>
+                <!-- 3. Güven Unsuru: Gerçek Sonuçlar -->
+                <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-yellow-500/30 transition-shadow transition-transform hover:scale-[1.02]">
+                    <span class="text-4xl text-yellow-400 block mb-3">📈</span>
+                    <h3 class="text-xl font-semibold text-white mb-2">Sürekli Optimizasyon</h3>
+                    <p class="text-gray-400">Gelişiminizi sürekli izler, haftalık geri bildirimlerle programınızı dinamik olarak optimize ederiz. Plateau (durgunluk) dönemlerine izin vermeyiz.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bilimsel Dayanaklar Bölümü (Güncellendi - Otorite Artırıcı) -->
+        <section id="kadro" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 bg-gray-800 rounded-2xl shadow-2xl">
+            <h2 class="text-4xl font-bold text-white text-center mb-4">Bilimsel Dayanaklarımız: Alanındaki Otoriteler</h2>
+            <p class="text-lg text-gray-400 text-center mb-12">Programlarımız, bu alandaki en etkili bilim insanlarının kanıta dayalı çalışmalarına dayanmaktadır.</p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
-                <h2 class="text-3xl font-bold text-yellow-400 text-center">
-                    BMH (BMR) ve Günlük Kalori İhtiyacı
-                </h2>
-                <p class="text-gray-400 text-sm text-center">
-                    *Mifflin-St Jeor denklemi kullanılarak hesaplanır.
-                </p>
+                <!-- Otorite 1: Brad Schoenfeld (Hipertrofi Uzmanı) -->
+                <div class="flex flex-col items-center p-6 bg-gray-900 rounded-xl shadow-xl transition-shadow hover:shadow-yellow-500/40">
+                    <img src="https://placehold.co/100x100/374151/E5E7EB?text=B.Schoenfeld" alt="Brad Schoenfeld" class="w-24 h-24 rounded-full object-cover mb-4 ring-2 ring-yellow-500">
+                    <h4 class="text-2xl font-bold text-white">Brad Schoenfeld, PhD</h4>
+                    <p class="text-yellow-400 font-medium mb-3">Kas Hipertrofisi ve Antrenman Hacmi</p>
+                    <span class="text-xs bg-red-800/50 text-red-300 px-2 py-1 rounded-full mb-3">Egzersiz Bilimi Otoritesi</span>
+                    <p class="text-sm text-gray-400 text-center">Tüm antrenman programlarımız, Dr. Schoenfeld'in kas gelişimine yönelik hacim, sıklık ve yoğunluk çalışmalarına göre optimize edilmiştir.</p>
+                </div>
 
-                <div class="space-y-4">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label for="age" class="block text-sm font-medium text-gray-300 mb-2">Yaş</label>
-                            <input id="age" type="number" placeholder="Örn: 30" class="calc-input" value="">
-                        </div>
-                        <div>
-                            <label for="gender" class="block text-sm font-medium text-gray-300 mb-2">Cinsiyet</label>
-                            <select id="gender" class="calc-input">
-                                <option value="" disabled selected>Seçiniz</option>
-                                <option value="male">Erkek</option>
-                                <option value="female">Kadın</option>
-                            </select>
-                        </div>
-                    </div>
+                <!-- Otorite 2: Alan Aragon (Beslenme Uzmanı) -->
+                <div class="flex flex-col items-center p-6 bg-gray-900 rounded-xl shadow-xl transition-shadow hover:shadow-yellow-500/40">
+                    <img src="https://placehold.co/100x100/374151/E5E7EB?text=A.Aragon" alt="Alan Aragon" class="w-24 h-24 rounded-full object-cover mb-4 ring-2 ring-yellow-500">
+                    <h4 class="text-2xl font-bold text-white">Alan Aragon, MS</h4>
+                    <p class="text-yellow-400 font-medium mb-3">Makro Besin Uzmanlığı ve Diyet Esnekliği</p>
+                    <span class="text-xs bg-blue-800/50 text-blue-300 px-2 py-1 rounded-full mb-3">Klinik Beslenme Uzmanı</span>
+                    <p class="text-sm text-gray-400 text-center">Beslenme planlarımız, Alan Aragon'un kişiselleştirilmiş makro dağılımları ve esnek diyet (IF) protokolleri hakkındaki kanıtlanmış prensipleri üzerine kuruludur.</p>
+                </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label for="weight" class="block text-sm font-medium text-gray-300 mb-2">Ağırlık (kg)</label>
-                            <input id="weight" type="number" placeholder="Örn: 75" class="calc-input" value="">
-                        </div>
-                        <div>
-                            <label for="height" class="block text-sm font-medium text-gray-300 mb-2">Boy (cm)</label>
-                            <input id="height" type="number" placeholder="Örn: 178" class="calc-input" value="">
-                        </div>
-                    </div>
+                <!-- Otorite 3: Stuart Phillips (Protein ve Yaşlanma) -->
+                <div class="flex flex-col items-center p-6 bg-gray-900 rounded-xl shadow-xl transition-shadow hover:shadow-yellow-500/40">
+                    <img src="https://placehold.co/100x100/374151/E5E7EB?text=S.Phillips" alt="Stuart Phillips" class="w-24 h-24 rounded-full object-cover mb-4 ring-2 ring-yellow-500">
+                    <h4 class="text-2xl font-bold text-white">Stuart Phillips, PhD</h4>
+                    <p class="text-yellow-400 font-medium mb-3">Protein Biyokimyası ve Kas Sentezi</p>
+                    <span class="text-xs bg-green-800/50 text-green-300 px-2 py-1 rounded-full mb-3">Akademik Araştırmacı</span>
+                    <p class="text-sm text-gray-400 text-center">Protein alımı, zamanlaması ve kas protein sentezini maksimize etme konularında Dr. Phillips'in temel çalışmaları, beslenme stratejimizin çekirdeğini oluşturur.</p>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Programlar ve Fırsat Section (Geliştirildi) -->
+        <section id="program" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <h2 class="text-4xl font-bold text-white text-center mb-4">Sana Özel Koçluk Paketleri</h2>
+            <p class="text-lg text-gray-400 text-center mb-12">Sadece doğru programla hedefine ulaşabilirsin. Süre uzadıkça fırsat büyür!</p>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <!-- Paket 1: Demo (GÜNCELLENDİ) -->
+                <div class="bg-gray-800 p-6 rounded-2xl shadow-lg ring-2 ring-gray-700 transition-transform hover:scale-[1.03] hover:shadow-2xl">
+                    <h3 class="text-3xl font-bold text-white mb-2">Demo</h3>
+                    <p class="text-sm text-gray-400 mb-4">Hizmetlerimizi denemek için ideal başlangıç.</p>
+                    <p class="text-4xl font-extrabold text-yellow-400 mb-2">300 TL</p> <!-- Fiyat Güncellendi -->
+                    <p class="text-sm text-gray-500 mb-2">Paket Süresi: 1 Ay</p>
                     
+                    <!-- Tek Seferlik Notu Eklendi -->
+                    <div class="bg-red-800/50 p-2 rounded-lg mb-4">
+                        <p class="text-xs font-bold text-red-300 text-center">BU PAKET SADECE BİR KEZ ALINABİLİR.</p>
+                    </div>
+
+                    <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                        <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Kişisel TDEE ve BMR Analizi</li>
+                        <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> 1 Kez Detaylı Program Hazırlama</li>
+                        <li class="flex items-center"><span class="text-red-400 mr-2">✗</span> Haftalık Geri Bildirim</li>
+                        <li class="flex items-center"><span class="text-red-400 mr-2">✗</span> Whatsapp Destek</li>
+                    </ul>
+                    <a href="https://wa.me/905459475808?text=Demo%20paket%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="block text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-xl transition-colors">
+                        Paketi Seç
+                    </a>
+                </div>
+
+                <!-- Paket 2: Middle -->
+                <div class="bg-gray-800 p-6 rounded-2xl shadow-lg ring-2 ring-blue-500 transition-transform hover:scale-[1.03] hover:shadow-2xl">
+                    <h3 class="text-3xl font-bold text-white mb-2">Middle</h3>
+                    <p class="text-sm text-gray-400 mb-4">Sürdürülebilir gelişim için temel koçluk.</p>
+                    <p class="text-4xl font-extrabold text-yellow-400 mb-2">1299 TL</p>
+                    <p class="text-sm text-gray-500 mb-6">Paket Süresi: 2 Ay</p>
+                    
+                    <!-- Fırsat Vurgusu -->
+                    <div class="bg-gray-700 p-2 rounded-lg mb-4">
+                        <p class="text-sm font-semibold text-gray-300">Aylık Maliyet: <span class="text-white">650 TL/Ay</span> <span class="text-green-400 ml-2">(%35 Fırsat)</span></p>
+                    </div>
+
+                    <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                        <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Kişisel TDEE ve BMR Analizi</li>
+                        <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Aylık Program Güncellemesi</li>
+                        <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Haftalık Geri Bildirim (Grup)</li>
+                        <li class="flex items-center"><span class="text-red-400 mr-2">✗</span> Whatsapp Destek</li>
+                    </ul>
+                    <a href="https://wa.me/905459475808?text=Middle%20paket%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="block text-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-colors">
+                        Paketi Seç
+                    </a>
+                </div>
+
+                <!-- Paket 3: Elite (EN ÇOK VURGULANAN) -->
+                <div class="bg-gray-900 p-8 rounded-2xl elite-card relative transition-transform scale-[1.05]">
+                    <!-- En Popüler Etiketi -->
+                    <span class="absolute top-0 right-0 bg-yellow-400 text-gray-900 text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-xl">EN POPÜLER</span>
+                    <h3 class="text-3xl font-bold text-white mb-2">Elite</h3>
+                    <p class="text-sm text-gray-400 mb-4">En Hızlı ve Garantili Sonuçlar için Tam Destek!</p>
+                    <p class="text-5xl font-extrabold text-yellow-400 mb-2">1499 TL</p>
+                    <p class="text-sm text-gray-500 mb-6">Paket Süresi: 3 Ay</p>
+                    
+                    <!-- Fırsat Vurgusu (En Yüksek İndirim) -->
+                    <div class="bg-yellow-400/20 p-2 rounded-lg mb-4 ring-2 ring-yellow-500">
+                        <p class="text-sm font-extrabold text-yellow-300">Aylık Maliyet: <span class="text-white">~500 TL/Ay</span> <span class="text-yellow-400 ml-2">(BÜYÜK FIRSAT!)</span></p>
+                    </div>
+
+                    <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                        <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Kişisel TDEE ve BMR Analizi</li>
+                        <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Haftalık Program Güncellemesi</li>
+                        <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Birebir Detaylı Geri Bildirim</li>
+                        <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> **7/24 Whatsapp İletişimi**</li>
+                    </ul>
+                    <!-- Risk Azaltma Garantisi -->
+                    <div class="text-center mb-4 text-xs text-green-400 font-bold bg-green-900/40 p-2 rounded-lg">
+                        ✅ 30 Gün Koşulsuz Para İade Garantisi
+                    </div>
+
+                    <a href="https://wa.me/905459475808?text=Elite%20paket%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="block text-center bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-extrabold py-4 rounded-xl transition-colors transform hover:scale-[1.02]">
+                        ELITE PAKETLE BAŞLA!
+                    </a>
+                </div>
+
+            </div>
+        </section>
+        
+        <!-- Başarı Hikayeleri Section -->
+        <section id="basari" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <h2 class="text-4xl font-bold text-white text-center mb-4">Garantili Sonuçlar ve Dönüşüm Hikayeleri</h2>
+            <p class="text-lg text-gray-400 text-center mb-12">Bizimle çalışanların sadece hedeflerine ulaştığını değil, onları aştığını görün.</p>
+
+            <!-- Örnek Başarı Kartları (Kaydırılabilir alan olabilir, burada 3 örnek) -->
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-green-500/30 transition-shadow">
+                    <div class="flex justify-around mb-4">
+                        <div class="text-center">
+                            <img src="https://placehold.co/120x150/4B5563/E5E7EB?text=ÖNCE" alt="Önce" class="rounded-lg mb-1">
+                            <p class="text-sm text-gray-400">Başlangıç</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="https://placehold.co/120x150/10B981/E5E7EB?text=SONRA" alt="Sonra" class="rounded-lg mb-1 border-2 border-green-500">
+                            <p class="text-sm text-green-400 font-bold">3 Ay Sonra</p>
+                        </div>
+                    </div>
+                    <p class="text-lg italic text-white mb-4">"3 ayda %12 vücut yağı kaybettim Alan Aragon prensiplerine dayalı program sayesinde hiç takılmadım"</p>
+                    <p class="text-sm font-semibold text-yellow-400">- Bedirhan A***** (Elite Üye)</p>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-green-500/30 transition-shadow">
+                    <div class="flex justify-around mb-4">
+                        <div class="text-center">
+                            <img src="https://placehold.co/120x150/4B5563/E5E7EB?text=ÖNCE" alt="Önce" class="rounded-lg mb-1">
+                            <p class="text-sm text-gray-400">Başlangıç</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="https://placehold.co/120x150/10B981/E5E7EB?text=SONRA" alt="Sonra" class="rounded-lg mb-1 border-2 border-green-500">
+                            <p class="text-sm text-green-400 font-bold">2 Ay Sonra</p>
+                        </div>
+                    </div>
+                    <p class="text-lg italic text-white mb-4">"Brad Schoenfeld beslenme rehberliği ile 4 kg kas kütlesi ekledim veriye dayalı programlama fark yarattı"</p>
+                    <p class="text-sm font-semibold text-yellow-400">- Burcu  K****** (Middle Üye)</p>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-green-500/30 transition-shadow">
+                    <div class="flex justify-around mb-4">
+                        <div class="text-center">
+                            <img src="https://placehold.co/120x150/4B5563/E5E7EB?text=ÖNCE" alt="Önce" class="rounded-lg mb-1">
+                            <p class="text-sm text-gray-400">Başlangıç</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="https://placehold.co/120x150/10B981/E5E7EB?text=SONRA" alt="Sonra" class="rounded-lg mb-1 border-2 border-green-500">
+                            <p class="text-sm text-green-400 font-bold">1 Ay Sonra</p>
+                        </div>
+                    </div>
+                    <p class="text-lg italic text-white mb-4">"Protein alımımdaki Stuart Phillipsin önerilerine göre yaptığım küçük düzeltmeler bile bu kadar fark yarattı inanamadım"</p>
+                    <p class="text-sm font-semibold text-yellow-400">- Cem Y*** (Demo Üye)</p>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Gelişim Simülasyonu -->
+        <section id="simulasyon" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="bg-gray-800 p-6 md:p-10 rounded-2xl shadow-xl">
+                <canvas id="developmentChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Hesaplayıcı Section -->
+        <section id="hesaplayici" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <h2 class="text-4xl font-bold text-white text-center mb-4">BMR / TDEE Hesaplayıcı</h2>
+            <p class="text-lg text-gray-400 text-center mb-12">Hedefine ulaşmak için günde kaç kaloriye ihtiyacın olduğunu bilimsel olarak hesapla. Kişiselleştirme burada başlar!</p>
+
+            <div class="max-w-xl mx-auto bg-gray-800 p-8 rounded-2xl shadow-2xl">
+                <form id="tdee-form" class="space-y-4">
+                    <!-- Yaş -->
                     <div>
-                        <label for="activity" class="block text-sm font-medium text-gray-300 mb-2">Haftalık Aktivite Seviyesi</label>
-                        <select id="activity" class="calc-input">
-                            <option value="" disabled selected>Seçiniz</option>
-                            <option value="1.2">Hareketsiz (Çok az egzersiz)</option>
-                            <option value="1.375">Hafif Aktif (Haftada 1-3 gün spor)</option>
-                            <option value="1.55">Orta Aktif (Haftada 3-5 gün spor)</option>
-                            <option value="1.725">Çok Aktif (Haftada 6-7 gün yoğun spor)</option>
-                            <option value="1.9">Aşırı Aktif (Günde iki kez antrenman)</option>
+                        <label for="age" class="block text-sm font-medium text-gray-400">Yaşınız</label>
+                        <input type="number" id="age" name="age" required min="10" max="120" class="mt-1 block w-full rounded-lg border-gray-700 bg-gray-900 shadow-sm text-white focus:ring-yellow-500 focus:border-yellow-500 p-3" placeholder="Örn: 30">
+                    </div>
+                    <!-- Cinsiyet -->
+                    <div>
+                        <label for="gender" class="block text-sm font-medium text-gray-400">Cinsiyetiniz</label>
+                        <select id="gender" name="gender" required class="mt-1 block w-full rounded-lg border-gray-700 bg-gray-900 shadow-sm text-white focus:ring-yellow-500 focus:border-yellow-500 p-3">
+                            <option value="">Seçiniz</option>
+                            <option value="male">Erkek</option>
+                            <option value="female">Kadın</option>
                         </select>
                     </div>
-
-                </div>
-
-                <button id="calculate-bmr" onclick="calculateBMR_TDEE()" class="w-full py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.01] hover:brightness-110">
-                    BMH ve Kalori İhtiyacını Hesapla
-                </button>
-
-                <div id="bmr-result-card" class="hidden bg-gray-900 p-4 rounded-lg border-l-4 border-yellow-500 mt-4 text-center space-y-2">
-                    <p class="text-sm text-gray-400">Sonuçlarınız (Günlük Kalori):</p>
-                    <p class="text-xl">
-                        Bazal Metabolizma Hızı (BMH): <span id="bmr-value" class="text-red-400 font-bold"></span> kcal
-                    </p>
-                    <p class="text-3xl mt-1">
-                        TDEE (Koruma İhtiyacı): <span id="tdee-value" class="text-green-400 font-extrabold"></span> kcal
-                    </p>
-                    <p class="text-sm text-gray-400 pt-2">
-                        *TDEE, mevcut kilonuzu korumak için gereken tahmini günlük kaloridir.
-                    </p>
-                </div>
-           
-            </div>
-        </section>
-        
-        <section id="makale" class="w-full text-center space-y-10 pt-10">
-            <h2 class="text-4xl font-bold text-yellow-400">Temel Bilimsel Alanlar</h2>
-            <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
-                <div class="article-card">
-                    <div class="bg-gray-800/70 border border-gray-700 p-6 sm:p-7 space-y-4 flex flex-col h-full">
-                      <span class="text-3xl text-yellow-500 block mb-3">🧬</span>
-                      <h3 class="text-xl sm:text-2xl font-semibold text-yellow-400">Protein Dengesi ve Kas Büyümesi</h3>
-                      <p id="article-1-text" class="text-gray-300 text-sm leading-relaxed flex-grow">
-                        Kas dokusu, yeterli amino asit dengesine ulaştığında maksimum büyüme potansiyeline ulaşır...
-                      </p>
-                      <button id="article-1-toggle" onclick="toggleArticleExpansion(1)" class="article-toggle-btn">
-                        Makalenin Tamamını Oku →
-                      </button>
+                    <!-- Boy -->
+                    <div>
+                        <label for="height" class="block text-sm font-medium text-gray-400">Boyunuz (cm)</label>
+                        <input type="number" id="height" name="height" required min="100" max="250" class="mt-1 block w-full rounded-lg border-gray-700 bg-gray-900 shadow-sm text-white focus:ring-yellow-500 focus:border-yellow-500 p-3" placeholder="Örn: 180">
                     </div>
-                </div>
-                <div class="article-card">
-                    <div class="bg-gray-800/70 border border-gray-700 p-6 sm:p-7 space-y-4 flex flex-col h-full">
-                      <span class="text-3xl text-yellow-500 block mb-3">💤</span>
-                      <h3 class="text-xl sm:text-2xl font-semibold text-yellow-400">Uyku ve Hormon Aktivasyonu</h3>
-                      <p id="article-2-text" class="text-gray-300 text-sm leading-relaxed flex-grow">
-                        Kaliteli uyku, büyüme hormonu salınımının en yoğun olduğu dönemdir...
-                      </p>
-                      <button id="article-2-toggle" onclick="toggleArticleExpansion(2)" class="article-toggle-btn">
-                        Makalenin Tamamını Oku →
-                      </button>
+                    <!-- Kilo -->
+                    <div>
+                        <label for="weight" class="block text-sm font-medium text-gray-400">Kilonuz (kg)</label>
+                        <input type="number" id="weight" name="weight" required min="30" max="300" class="mt-1 block w-full rounded-lg border-gray-700 bg-gray-900 shadow-sm text-white focus:ring-yellow-500 focus:border-yellow-500 p-3" placeholder="Örn: 80">
                     </div>
-                </div>
-                <div class="article-card">
-                    <div class="bg-gray-800/70 border border-gray-700 p-6 sm:p-7 space-y-4 flex flex-col h-full">
-                      <span class="text-3xl text-yellow-500 block mb-3">🏋️</span>
-                      <h3 class="text-xl sm:text-2xl font-semibold text-yellow-400">Antrenman-Dinlenme Döngüsü</h3>
-                      <p id="article-3-text" class="text-gray-300 text-sm leading-relaxed flex-grow">
-                        Her kas, antrenmanda değil dinlenmede büyür. Aşırı yüklenme kasın değil...
-                      </p>
-                      <button id="article-3-toggle" onclick="toggleArticleExpansion(3)" class="article-toggle-btn">
-                        Makalenin Tamamını Oku →
-                      </button>
+                    <!-- Aktivite Seviyesi -->
+                    <div>
+                        <label for="activity" class="block text-sm font-medium text-gray-400">Aktivite Seviyeniz</label>
+                        <select id="activity" name="activity" required class="mt-1 block w-full rounded-lg border-gray-700 bg-gray-900 shadow-sm text-white focus:ring-yellow-500 focus:border-yellow-500 p-3">
+                            <option value="">Seçiniz</option>
+                            <option value="1.2">Sedanter (Çok Az Egzersiz)</option>
+                            <option value="1.375">Hafif Aktif (Haftada 1-3 gün)</option>
+                            <option value="1.55">Orta Aktif (Haftada 3-5 gün)</option>
+                            <option value="1.725">Çok Aktif (Haftada 6-7 gün)</option>
+                            <option value="1.9">Ekstra Aktif (Her gün yoğun, çift antrenman)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-500 text-gray-900 font-bold py-3 rounded-xl shadow-lg transition-colors transform hover:scale-[1.01]">
+                        BMR ve TDEE Hesapla
+                    </button>
+                </form>
+
+                <!-- Sonuç Alanı -->
+                <div id="results" class="mt-8 p-6 bg-gray-900 border border-gray-700 rounded-xl hidden">
+                    <h4 class="text-2xl font-bold text-white mb-4 text-center">Analiz Sonuçlarınız</h4>
+                    <p class="mb-2">Bazal Metabolizma Hızı (BMR): <span id="bmr-value" class="font-bold text-yellow-400"></span> Kalori</p>
+                    <p class="mb-4">Günlük Toplam Enerji Harcaması (TDEE): <span id="tdee-value" class="font-bold text-yellow-400"></span> Kalori</p>
+                    
+                    <!-- Kişiselleştirilmiş CTA (Yeni - Dönüşüm Artırıcı) -->
+                    <div id="cta-tdee" class="mt-6 p-4 bg-yellow-600/20 border-l-4 border-yellow-500 rounded-lg">
+                        <p class="font-bold text-white mb-3">TDEE Değerinize Özel Koçluk Alın!</p>
+                        <p class="text-sm text-gray-300 mb-4">Bu değerlere göre, size özel makro besin dağılımını (Protein, Yağ, Karbonhidrat) ve antrenman hacmini planlayalım.</p>
+                        <a href="#program" class="block text-center bg-yellow-600 hover:bg-yellow-500 text-gray-900 font-bold py-2 rounded-xl transition-colors">
+                            Hemen Detaylı Koçluk Planını Gör!
+                        </a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="program" class="w-full text-center space-y-10 pt-10">
-            <h2 class="text-4xl font-bold text-yellow-400">Profesyonel **Online Koçluk** Süreçlerimiz</h2> <p class="text-gray-400 text-base leading-relaxed max-w-2xl mx-auto">
-                Hedefinize uygun seviyedeki <strong>kişiye özel Birebir Online Koçluk</strong> paketlerimizi keşfedin. </p>
-
-            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                
-                <div class="plan-card ring-4 ring-yellow-500/60">
-                    <div class="bg-gradient-to-b from-gray-800 to-gray-900 p-6 space-y-4 flex flex-col h-full">
-                        <h4 class="text-2xl font-extrabold text-yellow-300">Demo</h4>
-                        <p class="text-4xl font-bold text-yellow-400 my-2">Ücretsiz</p>
-                        <p class="text-xs font-semibold text-yellow-500">2 HAFTALIK DENEME KOÇLUĞU</p> <div class="text-left mt-3 mb-4 space-y-1 text-sm flex-grow">
-                            <h5 class="text-xs font-bold text-yellow-400 mb-1 uppercase tracking-wider">Koçluk Detayları:</h5>
-                            <ul class="space-y-2 text-gray-300">
-                                <li class="flex items-start">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-check flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    **Birebir Koçluk (Sınırlı İletişim)**
-                                </li>
-                                <li class="flex items-start">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-check flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    2 Haftalık Temel Antrenman Planı
-                                </li>
-                                <li class="flex items-start text-gray-500">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-x flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
-                                    Özel Beslenme / Makro Planı (Yok)
-                                </li>
-                            </ul>
-                        </div>
-                        <button onclick="window.open('https://wa.me/905459475808', '_blank')" class="whatsapp-btn">
-                            WhatsApp ile İletişime Geç
-                        </button>
-                        <p class="text-xs text-gray-500 italic mt-2">⚡ Ücretsiz dene, farkı kendin gör.</p>
-                    </div>
-                </div>
-
-                <div class="plan-card ring-1 ring-gray-700">
-                    <div class="bg-gradient-to-b from-gray-800 to-gray-900 p-6 space-y-4 flex flex-col h-full">
-                        <h4 class="text-2xl font-extrabold text-gray-200">Lite</h4>
-                        <p class="text-4xl font-bold text-yellow-400 my-2">599 TL</p>
-                        <p class="text-xs font-semibold text-yellow-500">1 AYLIK KOÇLUK SÜRESİ</p> <div class="text-left mt-3 mb-4 space-y-1 text-sm flex-grow">
-                            <h5 class="text-xs font-bold text-yellow-400 mb-1 uppercase tracking-wider">Koçluk Detayları:</h5>
-                            <ul class="space-y-2 text-gray-300">
-                                <li class="flex items-start">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-check flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    **Birebir Koçluk**
-                                </li>
-                                <li class="flex items-start">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-check flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    Kişiye Özel Antrenman Planı
-                                </li>
-                                <li class="flex items-start text-gray-500">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-x flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
-                                    Makro & Kalori Takibi (Yok)
-                                </li>
-                            </ul>
-                        </div>
-                        <button onclick="window.open('https://wa.me/905459475808', '_blank')" class="whatsapp-btn">
-                            WhatsApp ile İletişime Geç
-                        </button>
-                    </div>
-                </div>
-
-                <div class="plan-card ring-1 ring-gray-700">
-                    <div class="bg-gradient-to-b from-gray-800 to-gray-900 p-6 space-y-4 flex flex-col h-full">
-                        <h4 class="text-2xl font-extrabold text-gray-200">Middle</h4>
-                        <p class="text-4xl font-bold text-yellow-400 my-2">1299 TL</p>
-                        <p class="text-xs font-semibold text-yellow-500">2 AYLIK KOÇLUK SÜRESİ</p> <div class="text-left mt-3 mb-4 space-y-1 text-sm flex-grow">
-                            <h5 class="text-xs font-bold text-yellow-400 mb-1 uppercase tracking-wider">Koçluk Detayları:</h5>
-                            <ul class="space-y-2 text-gray-300">
-                                <li class="flex items-start">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-check flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    **Birebir Koçluk**
-                                </li>
-                                <li class="flex items-start">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-check flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    Kişiye Özel Antrenman Planı
-                                </li>
-                                <li class="flex items-start">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-check flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    Makro & Kalori Takibi
-                                </li>
-                                <li class="flex items-start text-gray-500">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-x flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
-                                    Supplement Desteği (Yok)
-                                </li>
-                            </ul>
-                        </div>
-                        <button onclick="window.open('https://wa.me/905459475808', '_blank')" class="whatsapp-btn">
-                            WhatsApp ile İletişime Geç
-                        </button>
-                    </div>
-                </div>
-
-                <div class="plan-card ring-1 ring-gray-700">
-                    <div class="bg-gradient-to-b from-gray-800 to-gray-900 p-6 space-y-4 flex flex-col h-full">
-                        <h4 class="text-2xl font-extrabold text-gray-200">Elite</h4>
-                        <p class="text-4xl font-bold text-yellow-400 my-2">1499 TL</p>
-                        <p class="text-xs font-semibold text-yellow-500">3 AYLIK KOÇLUK SÜRESİ</p> <div class="text-left mt-3 mb-4 space-y-1 text-sm flex-grow">
-                            <h5 class="text-xs font-bold text-yellow-400 mb-1 uppercase tracking-wider">Koçluk Detayları:</h5>
-                            <ul class="space-y-2 text-gray-300">
-                                <li class="flex items-start">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-check flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    **Birebir Koçluk (Sınırsız İletişim)**
-                                </li>
-                                <li class="flex items-start">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-check flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    Antrenman ve Video Analizi
-                                </li>
-                                <li class="flex items-start">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-check flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    Detaylı Beslenme Planı
-                                </li>
-                                <li class="flex items-start">
-                                    <svg class="w-4 h-4 mr-2 mt-1 feature-check flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    Supplement Desteği ve Takibi
-                                </li>
-                            </ul>
-                        </div>
-                        <button onclick="window.open('https://wa.me/905459475808', '_blank')" class="whatsapp-btn">
-                            WhatsApp ile İletişime Geç
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-16 pt-8 max-w-4xl mx-auto">
-                 <h3 class="text-2xl font-bold text-gray-100 text-center mb-6">Müşteri Başarısı: 1 Yıllık Gelişim Eğrisi</h3>
-                <div class="bg-gray-800/80 p-6 rounded-xl border border-gray-700 shadow-2xl">
-                    <canvas id="progressChart"></canvas>
-                </div>
-                <p class="text-xs text-gray-500 italic mt-4">
-                    *Grafik verileri, koçluk süreçlerimizin bilimsel prensiplere dayalı ortalama başarı potansiyelini göstermektedir.
-                </p>
-            </div>
-
-
-        </section>
-        
-        <section id="iletisim" class="w-full text-center space-y-4 max-w-4xl pt-10 mx-auto">
-            <h3 class="text-3xl font-bold text-yellow-400">Anında İletişim ve Ücretsiz Danışmanlık</h3>
-            <p class="text-gray-400 text-base mb-8 max-w-2xl mx-auto">
-                Hayatınızı bilimle değiştirin. Profesyonel spor danışmanlarımızla hemen WhatsApp üzerinden iletişime geçerek hedeflerinize yönelik ilk adımı atın.
-            </p>
+        <!-- Makaleler Section -->
+        <section id="makaleler" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <h2 class="text-4xl font-bold text-white text-center mb-4">Bilimsel Makaleler & Görüşler</h2>
+            <p class="text-lg text-gray-400 text-center mb-12">Yayınladığımız içerikler ve bilimsel temellerimiz.</p>
             
-            <div class="flex justify-center items-center py-6">
-                <button
-                    class="py-4 px-12 bg-green-500 hover:bg-green-600 text-white font-extrabold text-lg rounded-full shadow-2xl shadow-green-500/40 transition-all duration-300 transform hover:scale-105"
-                    onclick="window.open('https://wa.me/905459475808', '_blank')"
-                >
-                    Ücretsiz Danışmanlık Alın (WhatsApp)
-                </button>
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <!-- Makale 1 -->
+                <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-yellow-500/30 transition-shadow">
+                    <span class="text-xs font-semibold text-red-400 bg-red-900/50 px-2 py-1 rounded-full mb-3 inline-block">Fizyolog Onaylı</span>
+                    <h3 class="text-2xl font-bold text-white mb-3">Protein Dengesi ve Kas Hipertrofisi</h3>
+                    <p class="text-sm text-gray-400 mb-4">En güncel çalışmalar, yüksek protein alımının (vücut ağırlığının **1.6-2.2 gr/kg**) kas kütlesi kazanımı üzerindeki rolünü kanıtlıyor. Peki bu aralık neden bu kadar önemli?</p>
+                    <a href="#" class="text-yellow-400 hover:text-yellow-500 text-sm font-semibold">Devamını Oku →</a>
+                </div>
+
+                <!-- Makale 2 -->
+                <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-yellow-500/30 transition-shadow">
+                    <span class="text-xs font-semibold text-blue-400 bg-blue-900/50 px-2 py-1 rounded-full mb-3 inline-block">Antrenman Bilimi</span>
+                    <h3 class="text-2xl font-bold text-white mb-3">Antrenman Hacmi ve Sıklık Optimizasyonu</h3>
+                    <p class="text-sm text-gray-400 mb-4">Haftalık set sayısını, kas grupları arasında nasıl dağıtmalıyız? Güncel bilim, optimal toparlanma ve maksimum gelişim için ideal sıklık formülünü ortaya koyuyor.</p>
+                    <a href="#" class="text-yellow-400 hover:text-yellow-500 text-sm font-semibold">Devamını Oku →</a>
+                </div>
+
+                <!-- Makale 3 -->
+                <div class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-yellow-500/30 transition-shadow">
+                    <span class="text-xs font-semibold text-green-400 bg-green-900/50 px-2 py-1 rounded-full mb-3 inline-block">Beslenme</span>
+                    <h3 class="text-2xl font-bold text-white mb-3">Yağ Yakımında Kardiyo Zamanlaması</h3>
+                    <p class="text-sm text-gray-400 mb-4">Aç karnına kardiyo gerçekten daha mı etkili? Güncel metabolik araştırmalar, yağ yakımı hedefine ulaşmak için en iyi kardiyo stratejilerini açıklıyor.</p>
+                    <a href="#" class="text-yellow-400 hover:text-yellow-500 text-sm font-semibold">Devamını Oku →</a>
+                </div>
             </div>
-            <p class="text-xs text-gray-500 mt-2">Çalışma Saatleri: H.İçi 09:00 - 18:00</p>
         </section>
 
-      </main>
-      
-      <footer class="text-center text-gray-500 text-sm mt-10 border-t border-gray-800 pt-6 pb-10">
-        <p>© 2025 PhysioCore | Bilimsel Kas Gelişimi Platformu</p>
-        <p class="mt-1">Profesyonellik. Güven. Disiplin.</p>
-      </footer>
-    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 border-t border-gray-800 mt-12">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-lg font-extrabold text-yellow-400 mb-2">PhysioCore</p>
+            <p class="text-sm text-gray-500">Bilimsel Koçluk. Kanıtlanmış Sonuçlar.</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <a href="#hakkimizda" class="text-gray-400 hover:text-yellow-400 text-sm">Hakkımızda</a>
+                <a href="#program" class="text-gray-400 hover:text-yellow-400 text-sm">Paketler</a>
+                <a href="https://wa.me/905459475808" target="_blank" class="text-gray-400 hover:text-yellow-400 text-sm">İletişim</a>
+            </div>
+            <p class="mt-6 text-xs text-gray-600">&copy; 2024 PhysioCore. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
     
+    <!-- Sticky WhatsApp Button (SVG DÜZELTİLDİ) -->
+    <a href="https://wa.me/905459475808?text=Koçluk%20paketleri%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="whatsapp-sticky bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl transition-colors transform">
+        <!-- Yeni, sorunsuz çalışan WhatsApp SVG kodu -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.52 3.42 1.49 4.87l-1.5 5.48 5.61-1.46c1.42.77 3 1.18 4.31 1.18 5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91zm0 18.06c-1.35 0-2.66-.39-3.79-1.11l-.27-.16-2.82.74.76-2.75-.18-.28c-.76-1.2-.12-3.14-.12-4.13 0-4.54 3.7-8.24 8.24-8.24s8.24 3.7 8.24 8.24-3.7 8.24-8.24 8.24zm5.5-6.19c-.3-.15-1.77-.88-2.05-.98-.29-.1-.5-.15-.71.15-.2.3-.8.98-.98 1.18-.19.2-.39.22-.72.08-.34-.14-1.44-.54-2.74-1.69-.64-.56-1.07-1.26-1.42-1.85-.35-.59-.04-.9-.04-.9s-.35-.85-.5-1.15c-.15-.3-.32-.26-.5-.26h-.69c-.21 0-.55.08-.85.42-.3.34-1.14 1.12-1.14 2.74s1.17 3.17 1.33 3.4c.15.22 2.3 3.5 5.56 4.88 3.25 1.38 3.25.92 3.84.86.59-.06 1.78-.72 2.03-1.44.25-.71.25-1.31.17-1.45-.07-.13-.29-.21-.61-.38z"/>
+        </svg>
+    </a>
+
+    <!-- JavaScript Alanı -->
     <script>
-        // Data ve Sabitler
-        const articleData = {
-            1: { 
-                preview: 'Kas dokusu, yeterli amino asit dengesine ulaştığında maksimum büyüme potansiyeline ulaşır...',
-                full: 'Kas dokusu, yeterli amino asit dengesine ulaştığında maksimum büyüme potansiyeline ulaşır. Protein alımı kas onarımı ve hacim artışı için kritik önemdedir. Özellikle direnç antrenmanı sonrası ilk 1 saat içindeki yüksek kaliteli protein tüketimi, anabolik pencerenin etkisini en üst düzeye çıkarır ve toparlanmayı hızlandırır. Günlük protein ihtiyacınızı, vücut ağırlığınızın kilogram başına 1.6 ila 2.2 gram arasında tutmanız önerilir.'
-            },
-            2: { 
-                preview: 'Kaliteli uyku, büyüme hormonu salınımının en yoğun olduğu dönemdir...',
-                full: 'Kaliteli uyku, büyüme hormonu salınımının en yoğun olduğu dönemdir ve kas dokusu tamirini bu evrede tamamlar. Uykusuzluk, kortizol (stres hormonu) seviyelerini artırarak kas yıkımını tetikler ve testosteron üretimini düşürür. Optimum gelişim için kesintisiz 7-9 saat uyku şarttır.'
-            },
-            3: { 
-                preview: 'Her kas, antrenmanda değil dinlenmede büyür. Aşırı yüklenme kasın değil...',
-                full: 'Her kas, antrenmanda değil dinlenmede büyür. Aşırı yüklenme kasın değil, sinir sisteminin verimini düşürür (Overtraining). Doğru tempo ve setler arası dinlenme süreleri, uzun vadeli kazanım getirir. Bir kas grubuna en az 48 saat dinlenme vermeyi hedefleyin.'
-            }
-        };
-
-        let isArticleExpanded = {};
-        let metricsAnimated = false; 
-
-        // Tailwind Sınıfları
-        const NAV_BUTTON_CLASSES = "flex-shrink-0 py-2 px-3 text-xs sm:text-sm font-medium rounded-full transition-colors transform hover:scale-105 hover:brightness-110 text-gray-300 hover:text-yellow-400 hover:bg-gray-800";
-        const NAV_BUTTON_ACTIVE_CLASSES = "bg-yellow-600 text-black shadow-lg shadow-yellow-500/50";
-        const ARTICLE_CARD_CLASSES = "rounded-xl overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-yellow-500/30 transform hover:-translate-y-1 hover:brightness-105";
-
-        document.querySelectorAll('.nav-button').forEach(el => el.className = NAV_BUTTON_CLASSES);
-        document.querySelectorAll('.mobile-nav-button').forEach(el => el.className = NAV_BUTTON_CLASSES.replace('text-xs sm:text-sm', 'text-base'));
-        document.querySelectorAll('.article-card').forEach(el => el.className = ARTICLE_CARD_CLASSES);
-        document.querySelectorAll('.plan-card').forEach(el => el.className = "rounded-xl overflow-hidden transition-all duration-300 transform hover:scale-[1.03] hover:brightness-105 ring-1 ring-gray-700");
-        document.querySelectorAll('.whatsapp-btn').forEach(el => el.className = "w-full py-3 px-4 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold rounded-lg shadow-lg hover:shadow-yellow-500/50 transition-all transform hover:scale-[1.02] mt-4");
-        
-        // Başlangıçta tüm makalelerin önizlemesini yükle
-        for (let id in articleData) {
-            document.getElementById(`article-${id}-text`).textContent = articleData[id].preview;
-        }
-
-
-        // Navigasyon ve Menü İşlevleri
+        // Sayfalara akıcı geçiş için mobil menü kontrolü
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
-            if (menu.classList.contains('menu-open')) {
-                menu.classList.remove('menu-open');
-                menu.classList.add('menu-hidden');
-            } else {
-                menu.classList.add('menu-open');
-                menu.classList.remove('menu-hidden');
-            }
+            const isExpanded = menu.classList.toggle('menu-visible');
+            menu.classList.toggle('menu-hidden', !isExpanded);
+            document.getElementById('mobile-menu-button').setAttribute('aria-expanded', isExpanded);
         }
 
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-            // Mobil menüyü kapat
-            if (document.getElementById('mobile-menu').classList.contains('menu-open')) {
-                toggleMenu();
-            }
+        document.getElementById('mobile-menu-button').addEventListener('click', toggleMenu);
+
+        // --- Metric Counter Animation (Sayaç Animasyonu) ---
+        function animateValue(id, start, end, duration) {
+            // Hata düzeltildi: clearInterval kullanılarak tek bir artış döngüsü sağlanır.
+            if (start === end) return;
+            const range = end - start;
+            let current = start;
+            // Adım büyüklüğü belirleniyor (float değerler için)
+            const numSteps = 50; 
+            const step = range / numSteps;
+            let stepCount = 0;
+            const stepTime = Math.floor(duration / numSteps);
+            const obj = document.getElementById(id);
+
+            const timer = setInterval(() => {
+                current += step;
+                stepCount++;
+
+                if (stepCount >= numSteps) {
+                    current = end; // Hedef değere ulaşıldığında tam olarak o değeri yazdır
+                    clearInterval(timer);
+                }
+                
+                if(id === 'metric-1') {
+                    obj.textContent = Math.min(Math.round(current), end) + '%'; 
+                } else if(id === 'metric-2') {
+                    obj.textContent = Math.min(current, end).toFixed(1); 
+                } else if(id === 'metric-3') {
+                    obj.textContent = Math.min(Math.round(current), end) + 'K+'; 
+                } else if(id === 'metric-4') {
+                    obj.textContent = Math.min(Math.round(current), end) + '+'; 
+                }
+                
+            }, stepTime);
         }
 
-        // Makale Genişletme İşlevi
-        function toggleArticleExpansion(id) {
-            const textElement = document.getElementById(`article-${id}-text`);
-            const buttonElement = document.getElementById(`article-${id}-toggle`);
+        window.onload = function () {
+            // Metrikler Yüklenir Yüklenmez Başlar
+            animateValue("metric-1", 0, 98, 1500); // Müşteri Memnuniyeti
+            animateValue("metric-2", 0, 4.2, 1500); // Kas Kazanımı (Düzeltildi)
+            animateValue("metric-3", 0, 3, 1000); // Koçluk Saati
+            animateValue("metric-4", 0, 500, 2000); // Topluluk
+
+            // Simülasyon Grafiğini Başlat
+            renderDevelopmentChart();
+        }
+
+        // --- Chart.js Development Simulation (Gelişim Simülasyonu) ---
+        function renderDevelopmentChart() {
+            const ctx = document.getElementById('developmentChart').getContext('2d');
+            const data = {
+                labels: ['Başlangıç', 'Ay 1', 'Ay 2', 'Ay 3', 'Ay 6', 'Ay 9', 'Ay 12'],
+                datasets: [
+                    {
+                        label: 'Gelişim (Elite Paket)',
+                        data: [0, 1.5, 2.7, 4.0, 5.5, 6.8, 8.0], // Örnek Yüksek Gelişim Verisi
+                        borderColor: 'rgb(252, 211, 77)',
+                        backgroundColor: 'rgba(252, 211, 77, 0.2)',
+                        pointBackgroundColor: 'rgb(252, 211, 77)',
+                        tension: 0.4,
+                        borderWidth: 3,
+                        fill: true
+                    },
+                    {
+                        label: 'Ortalama Kişisel Çaba',
+                        data: [0, 0.5, 0.8, 1.0, 1.2, 1.3, 1.4], // Örnek Düşük Gelişim Verisi
+                        borderColor: 'rgb(107, 114, 128)',
+                        backgroundColor: 'rgba(107, 114, 128, 0.1)',
+                        pointBackgroundColor: 'rgb(107, 114, 128)',
+                        tension: 0.4,
+                        borderWidth: 1,
+                        borderDash: [5, 5],
+                        fill: false
+                    }
+                ]
+            };
             
-            if (isArticleExpanded[id]) {
-                textElement.textContent = articleData[id].preview;
-                buttonElement.textContent = 'Makalenin Tamamını Oku →';
-                isArticleExpanded[id] = false;
-            } else {
-                textElement.textContent = articleData[id].full;
-                buttonElement.textContent = 'Gizle';
-                isArticleExpanded[id] = true;
-            }
+            const config = {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Konteynerin genişliğini alması için
+                    animation: { 
+                        duration: 2500, 
+                        easing: 'easeOutQuart', 
+                    },
+                    plugins: {
+                        legend: { position: 'top', labels: { color: 'rgb(209, 213, 219)', font: { size: 14 } } },
+                        title: { display: true, text: 'Koçluk Süreçlerimizle 1 Yıllık Tahmini Gelişim Simülasyonu', color: 'rgb(252, 211, 77)', font: { size: 18, weight: 'bold' } },
+                        tooltip: { 
+                            backgroundColor: 'rgba(31, 41, 55, 0.9)', 
+                            titleColor: 'rgb(255, 255, 255)', 
+                            bodyColor: 'rgb(209, 213, 219)', 
+                        }
+                    },
+                    scales: {
+                        x: { 
+                            grid: { color: 'rgba(55, 65, 81, 0.5)', }, 
+                            ticks: { color: 'rgb(209, 213, 219)', }, 
+                            title: { display: true, text: 'Zaman Çizelgesi', color: 'rgb(156, 163, 175)', } 
+                        },
+                        y: { 
+                            grid: { color: 'rgba(55, 65, 81, 0.5)', }, 
+                            ticks: { color: 'rgb(209, 213, 219)', }, 
+                            title: { display: true, text: 'Kazanım (kg)', color: 'rgb(156, 163, 175)', } ,
+                            min: 0,
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctx, config);
         }
 
-        // BMH ve TDEE Hesaplama İşlevi
-        function calculateBMR_TDEE() {
-            const weight = parseFloat(document.getElementById('weight').value);
-            const height = parseFloat(document.getElementById('height').value);
-            const age = parseFloat(document.getElementById('age').value);
+        // --- TDEE Calculator (Hesaplayıcı Fonksiyonu) ---
+        document.getElementById('tdee-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const age = parseInt(document.getElementById('age').value);
             const gender = document.getElementById('gender').value;
-            const activityMultiplier = parseFloat(document.getElementById('activity').value);
-            
-            const resultCard = document.getElementById('bmr-result-card');
-            const bmrValueEl = document.getElementById('bmr-value');
-            const tdeeValueEl = document.getElementById('tdee-value');
+            const height = parseInt(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const activity = parseFloat(document.getElementById('activity').value);
 
-            if (isNaN(weight) || weight <= 0 || isNaN(height) || height <= 0 || isNaN(age) || age <= 0 || !gender || isNaN(activityMultiplier)) {
-                alert('Lütfen tüm alanları doğru ve geçerli değerlerle doldurun.');
-                resultCard.classList.add('hidden');
+            let bmr = 0;
+            
+            // Harris-Benedict Formülü kullanılarak BMR hesaplanır
+            if (gender === 'male') {
+                // BMR Erkek: 66.5 + (13.75 * Ağırlık kg) + (5.003 * Boy cm) - (6.75 * Yaş yıl)
+                bmr = 66.5 + (13.75 * weight) + (5.003 * height) - (6.75 * age);
+            } else if (gender === 'female') {
+                // BMR Kadın: 655.1 + (9.563 * Ağırlık kg) + (1.850 * Boy cm) - (4.676 * Yaş yıl)
+                bmr = 655.1 + (9.563 * weight) + (1.850 * height) - (4.676 * age);
+            } else {
+                // Hata durumu
+                document.getElementById('results').innerHTML = '<p class="text-red-400 text-center">Lütfen cinsiyetinizi seçiniz.</p>';
+                document.getElementById('results').classList.remove('hidden');
                 return;
             }
 
-            let bmr;
-            // Mifflin-St Jeor Denklemi
-            // Erkek: 10 * kg + 6.25 * cm - 5 * yaş + 5
-            // Kadın: 10 * kg + 6.25 * cm - 5 * yaş - 161
-            if (gender === 'male') {
-                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
-            } else { // female
-                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
-            }
+            // TDEE = BMR * Aktivite Katsayısı
+            const tdee = bmr * activity;
 
-            const tdee = bmr * activityMultiplier;
-
-            const roundedBmr = Math.round(bmr);
-            const roundedTdee = Math.round(tdee);
-
-
-            // UI Güncelleme
-            bmrValueEl.textContent = roundedBmr.toLocaleString('tr-TR');
-            tdeeValueEl.textContent = roundedTdee.toLocaleString('tr-TR');
+            // Sonuçları göster
+            document.getElementById('bmr-value').textContent = Math.round(bmr).toLocaleString('tr-TR');
+            document.getElementById('tdee-value').textContent = Math.round(tdee).toLocaleString('tr-TR');
             
-            resultCard.classList.remove('hidden');
-        }
+            // CTA metnine TDEE değerini ekle
+            document.getElementById('tdee-cta-value').textContent = Math.round(tdee).toLocaleString('tr-TR');
 
-
-        // Metrik Sayaç Animasyonu
-        function animateCounter(elementId, targetValue, duration, symbol = '', decimalPlaces = 0) {
-            const element = document.getElementById(elementId);
-            if (!element) return;
-
-            const startValue = 0;
-            const startTime = performance.now();
-
-            function updateCounter(currentTime) {
-                const elapsedTime = currentTime - startTime;
-                const progress = Math.min(1, elapsedTime / duration);
-                const currentValue = startValue + progress * (targetValue - startValue);
-
-                element.textContent = currentValue.toFixed(decimalPlaces) + symbol;
-
-                if (progress < 1) {
-                    requestAnimationFrame(updateCounter);
-                } else {
-                    element.textContent = targetValue.toFixed(decimalPlaces) + symbol;
-                }
-            }
-            requestAnimationFrame(updateCounter);
-        }
-        
-        // Metriklerin Canlanma Kontrolü
-        function checkMetricsVisibility() {
-            if (metricsAnimated) return;
-
-            const metricSection = document.getElementById('metric-card-1');
-            if (!metricSection) return;
-
-            const rect = metricSection.getBoundingClientRect();
-            // Ekranın %80'ine girdiğinde canlan
-            if (rect.top <= window.innerHeight * 0.8 && rect.bottom >= 0) {
-                
-                // Animasyonları başlat
-                animateCounter('metric-1', 98, 1500, '%', 0);
-                animateCounter('metric-2', 4.2, 1500, 'kg', 1);
-                animateCounter('metric-3', 1240, 1500, '+', 0);
-
-                // CSS geçişini tetikle
-                document.getElementById('metric-card-1').classList.remove('metric-card-initial');
-                document.getElementById('metric-card-1').classList.add('metric-card-visible');
-                document.getElementById('metric-card-2').classList.remove('metric-card-initial');
-                document.getElementById('metric-card-2').classList.add('metric-card-visible');
-                document.getElementById('metric-card-3').classList.remove('metric-card-initial');
-                document.getElementById('metric-card-3').classList.add('metric-card-visible');
-
-                metricsAnimated = true; // Tekrar çalışmasını engelle
-                window.removeEventListener('scroll', checkMetricsVisibility);
-            }
-        }
-        
-        // Grafik Oluşturma İşlevi (Chart.js)
-        function renderProgressChart() {
-            const ctx = document.getElementById('progressChart').getContext('2d');
+            document.getElementById('results').classList.remove('hidden');
             
-            const data = {
-                labels: ['Başlangıç', '3. Ay', '6. Ay', '9. Ay', '12. Ay'],
-                datasets: [
-                    {
-                        label: 'Kas Kütlesi (Tahmini Net Kazanım, kg)',
-                        data: [0, 1.5, 3.2, 4.5, 5.8],
-                        fill: false,
-                        backgroundColor: 'rgb(245, 158, 11)',
-                        borderColor: 'rgba(245, 158, 11, 0.8)',
-                        tension: 0.4,
-                        borderWidth: 3,
-                        pointRadius: 5,
-                        pointBackgroundColor: 'rgb(252, 211, 77)',
-                    },
-                ],
-            };
-
-            const options = {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: { duration: 2500, easing: 'easeOutQuart', },
-                plugins: {
-                    legend: { position: 'top', labels: { color: 'rgb(209, 213, 219)', font: { size: 14 } } },
-                    title: { display: true, text: 'Koçluk Süreçlerimizle 1 Yıllık Tahmini Gelişim Simülasyonu', color: 'rgb(252, 211, 77)', font: { size: 18, weight: 'bold' } },
-                    tooltip: { backgroundColor: 'rgba(31, 41, 55, 0.9)', titleColor: 'rgb(255, 255, 255)', bodyColor: 'rgb(209, 213, 219)', }
-                },
-                scales: {
-                    x: { grid: { color: 'rgba(55, 65, 81, 0.5)', }, ticks: { color: 'rgb(209, 213, 219)', }, title: { display: true, text: 'Zaman Çizelgesi', color: 'rgb(156, 163, 175)', } },
-                    y: { grid: { color: 'rgba(55, 65, 81, 0.5)', }, ticks: { color: 'rgb(209, 213, 219)', }, title: { display: true, text: 'Kazanım (kg)', color: 'rgb(156, 163, 175)', }, min: 0, }
-                }
-            };
-            
-            new Chart(ctx, { type: 'line', data: data, options: options });
-        }
-
-        // Sayfa yüklendiğinde çalışacak kodlar
-        document.addEventListener('DOMContentLoaded', () => {
-            renderProgressChart();
-            // Scroll olayını dinlemeye başla
-            window.addEventListener('scroll', checkMetricsVisibility);
-            // Sayfa yüklenir yüklenmez ilk kontrolü yap
-            checkMetricsVisibility();
+            // Sonuçlara kaydır
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
-    </script>
 
+    </script>
 </body>
 </html>
